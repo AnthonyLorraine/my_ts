@@ -42,13 +42,15 @@
     </div>
     <div class="offcanvas-body">
         <nav class="nav flex-column align-items-end mt-3">
-            {% if not user.is_manager %}
+            {% if user %}
                 <a class="nav-link text-dark h3 py-2" href="{% url 'home' %}">My Time Sheets</a>
-            {% else %}
+            {% endif %}
+            {% if user.is_manager %}
                 <a class="nav-link text-dark h3 py-2" href="{% url 'manager-team-member-list' %}">Staff Time
                     Sheets</a>
                 <hr/>
-
+            {% endif %}
+            {% if user.is_superuser or user.is_manager %}
                 <div class="nav-link text-dark h3 py-2">
                     <div class="" id="setupTeamMenu"
                          data-bs-toggle="dropdown" aria-expanded="false">
@@ -71,6 +73,8 @@
                         <li><a class="h3 dropdown-item py-3" href="{% url 'settings-list' %}">View Settings</a></li>
                     </ul>
                 </div>
+
+
             {% endif %}
             {% if not user.team %}
                 <li><a class="h3 dropdown-item py-3" href="{% url 'team-list' %}">Join a Team</a></li>
