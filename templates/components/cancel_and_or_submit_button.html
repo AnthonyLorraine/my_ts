@@ -1,0 +1,6 @@
+<div class="d-flex flex-row justify-content-end">
+    <a class="btn p-3 px-3 mt-3 me-3" href="{{ request.META.HTTP_REFERER }}">Back</a>
+    {% if submit %}
+        <button type="submit" class="btn {% if button_colour %}btn-{{ button_colour }}{% else %}btn-dark{% endif %} p-3 px-5 mt-3">{{ button_name }}</button>
+    {% endif %}
+</div>

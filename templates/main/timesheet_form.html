@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Create{% endblock %}
+{% block content %}
+    <div>
+    <h4 class="my-4 text-center">New Timesheet</h4>
+    </div>
+    <form method="post" class="d-flex flex-column">{% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="form-floating mb-3 mt-3">
+            {{ form.start_date_time.errors }}
+            {{ form.start_date_time }}
+            {{ form.start_date_time.label_tag }}
+        </div>
+        <div class="form-floating mb-3">
+            {{ form.duration.errors }}
+            {{ form.duration }}
+            <label for="id_duration">{{ form.duration.label }}</label>
+        </div>
+        <div class="form-floating mb-3">
+            {{ form.penalty.errors }}
+            {{ form.penalty }}
+            {{ form.penalty.label_tag }}
+        </div>
+        {% include 'components/cancel_and_or_submit_button.html' with submit=True button_name="Save" %}
+    </form>
+{% endblock %}

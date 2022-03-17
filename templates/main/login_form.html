@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Log in{% endblock %}
+
+{% block content %}
+    <div class="text-center mt-4 mb-3">
+        <span class="material-icons text-muted border border-5 border-dark rounded" style="font-size: 100px;">
+            schedule
+        </span>
+    </div>
+    <form method="post" class="py-4 needs-validation" novalidate>{% csrf_token %}
+        {% if form.errors %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Holy guacamole!</strong> {{ form.non_field_errors }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endif %}
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control {% if form.username.errors %}is-invalid{% endif %}" id="id_username"
+                   name="username" autocapitalize="none"
+                   placeholder="e123456"
+                   aria-describedby="usernameFeedback" required>
+            <label for="id_username">Username</label>
+            <div id="usernameFeedback" class="invalid-feedback">
+                {{ form.username.errors }}
+            </div>
+        </div>
+        {#        <small class="text-danger">{{ form.username.errors }}</small>#}
+        <div class="form-floating">
+            <input type="password" class="form-control {% if form.password.errors %}is-invalid{% endif %}"
+                   id="id_password" name="password" placeholder="Password"
+                   aria-describedby="passwordFeedback" required>
+            <label for="id_password">Password</label>
+            <div id="passwordFeedback" class="invalid-feedback">
+                {{ form.password.errors }}
+            </div>
+        </div>
+        {#        <small class="text-danger">{{ form.password.errors }}</small>#}
+        <div class="d-flex flex-row justify-content-end">
+            <a class="btn p-3 px-3 mt-3 me-3" href="{% url 'register-employee' %}">Register</a>
+            <button type="submit" class="btn btn-dark p-3 px-5 mt-3">Log in</button>
+        </div>
+    </form>
+    <div class="d-flex text-center pt-3">
+        <small class="fst-italic">Passwords aren't stored in the database and are impossible to guess based off the <a
+                href="https://docs.djangoproject.com/en/4.0/topics/auth/passwords/#how-django-stores-passwords"
+                class="text-decoration-none text-muted" target="_blank">Django's</a> password management system.</small>
+    </div>
+
+{% endblock %}

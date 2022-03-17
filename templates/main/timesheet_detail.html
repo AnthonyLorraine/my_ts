@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Timesheet | {{ timesheet.start_date_time|date:'d M Y' }}{% endblock %}
+
+{% block content %}
+    <main class="container p3">
+        <div class="mt-3">
+            <h2 class="">
+                {% if timesheet.start_date_time|date:'d M Y' != timesheet.end_date_time|date:'d M Y' %}
+                    {{ timesheet.start_date_time|date:'d M Y' }} - {{ timesheet.end_date_time|date:'d M Y' }}
+                {% else %}
+                    {{ timesheet.start_date_time|date:'d M Y' }}
+                {% endif %}
+            </h2>
+            <h6 class="text-muted">
+                {{ timesheet.start_date_time|time }} - {{ timesheet.end_date_time|time }}
+            </h6>
+            <a href="{% url 'timesheet-edit' timesheet.pk %}" class="btn btn-sm btn-warning">Edit</a>
+            <div class="my-4">
+                <h6>Task</h6>
+                <p>
+                    {% lorem 1 %}
+                </p>
+            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Worked</th>
+                    <th>Accrued</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for tsr in timesheet.rows %}
+                    <tr>
+                        <td>{{ tsr.date_worked }}</td>
+                        <td>{{ tsr.worked_duration_str }}</td>
+                        <td>{{ tsr.payout_duration_str }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>{{ timesheet.duration_str }}</td>
+                    <td>{{ timesheet.payout_duration_str }}</td>
+                </tr>
+                </tfoot>
+            </table>
+            <small class="pb-2">* This timesheet accrued {{ timesheet.penalty.penalty_type.name|lower }}
+                allowances.</small>
+            <div class="d-flex flex-row justify-content-end">
+                <a class="btn btn-dark p-3 px-5 mt-3 me-3" href="{{ request.META.HTTP_REFERER }}">Back</a>
+            </div>
+        </div>
+    </main>
+{% endblock %}

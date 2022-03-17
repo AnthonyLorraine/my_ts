@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage Team{% endblock %}
+
+{% block content %}
+    <main class="container p-3 ">
+        <h1 class="py-3">{{ team.name }}</h1>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Employee</th>
+                {% for penalty_type in employee_list.0.duration_outstanding_per_penalty_type %}
+                    {% for key, value in penalty_type.items %}
+                        <th>{{ key|lower|capfirst }}</th>
+                    {% endfor %}
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for employee in employee_list %}
+                <tr>
+                    <td><a href="{% url 'employee-detail' employee.slug %}">{{ employee.get_full_name }}</a></td>
+                    {% for penalty_type in employee.duration_outstanding_per_penalty_type %}
+                        {% for key, value in penalty_type.items %}
+                            <td>{{ value }}</td>
+                        {% endfor %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr>
+                <td>Totals</td>
+                {% for penalty_type in team.staff_penalty_hours %}
+                    {% for key, value in penalty_type.items %}
+                        <td>{{ value }}</td>
+                    {% endfor %}
+                {% endfor %}
+            </tr>
+            </tfoot>
+        </table>
+    </main>
+
+{% endblock %}

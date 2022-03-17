@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+    <main class="container p-3">
+
+        <h1 class="pb-3">Settings</h1>
+        {% for setting in settings_list %}
+            <strong class="text-uppercase">{{ setting.name }}</strong>: <span class="text-muted ms-3 h6">{{ setting.value }}</span>
+        {% endfor %}
+    </main>
+
+
+{% endblock %}

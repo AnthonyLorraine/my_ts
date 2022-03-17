@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Team Members{% endblock %}
+
+{% block content %}
+    <main class="container p-3">
+    <h3 class="py-3">{{ team.name }}</h3>
+        <table  style="width: 100%;">
+            <thead>
+            <tr>
+                <th style="width: 60%;">Name</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for employee in object_list %}
+                <tr>
+                    <td>{{ employee.get_full_name }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+             <div class="d-flex flex-row justify-content-end">
+            <a class="btn p-3 px-3 mt-3 me-3" href="{{ request.META.HTTP_REFERER }}">Back</a>
+        </div>
+    </main>
+
+
+{% endblock %}

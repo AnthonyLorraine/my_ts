@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirm Deletion{% endblock %}
+
+{% block content %}
+    <main class="container p-3 pt-5">
+        <form method="post">{% csrf_token %}
+            <h1 class="pb-4">Confirm Deletion</h1>
+            Are you sure want to delete the {{ object }} team?
+            {% include 'components/cancel_and_or_submit_button.html' with submit=True button_name="Delete" button_colour="danger" %}
+        </form>
+    </main>
+
+{% endblock %}

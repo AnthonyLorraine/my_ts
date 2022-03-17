@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock %}
+
+
+{% block content %}
+    <main>
+        <form method="post" class="py-4 needs-validation" novalidate>{% csrf_token %}
+            {% if form.errors %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Holy guacamole!</strong> {{ form.non_field_errors }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endif %}
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control {% if form.username.errors %}is-invalid{% endif %}"
+                       id="id_username"
+                       name="username" autocapitalize="none"
+                       placeholder="e123456"
+                       aria-describedby="usernameFeedback" required>
+                <label for="id_username">Username</label>
+                <div id="usernameFeedback" class="invalid-feedback">
+                    {{ form.username.errors }}
+                </div>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control {% if form.first_name.errors %}is-invalid{% endif %}"
+                       id="id_first_name"
+                       name="first_name" autocapitalize="none"
+                       placeholder="John"
+                       aria-describedby="first_nameFeedback" required>
+                <label for="id_first_name">First Name</label>
+                <div id="first_nameFeedback" class="invalid-feedback">
+                    {{ form.first_name.errors }}
+                </div>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control {% if form.last_name.errors %}is-invalid{% endif %}"
+                       id="id_last_name"
+                       name="last_name" autocapitalize="none"
+                       placeholder="Smith"
+                       aria-describedby="last_nameFeedback" required>
+                <label for="id_last_name">Last Name</label>
+                <div id="last_nameFeedback" class="invalid-feedback">
+                    {{ form.last_name.errors }}
+                </div>
+            </div>
+
+            <div class="form-floating">
+                <input type="password" class="form-control {% if form.password.errors %}is-invalid{% endif %}"
+                       id="id_password" name="password" placeholder="Password"
+                       aria-describedby="passwordFeedback" required>
+                <label for="id_password">Password</label>
+                <div id="passwordFeedback" class="invalid-feedback">
+                    {{ form.password.errors }}
+                </div>
+            </div>
+
+            <div class="d-flex flex-row justify-content-end">
+                <button type="submit" class="btn btn-dark p-3 px-5 mt-3">Register</button>
+            </div>
+        </form>
+    </main>
+
+
+{% endblock %}

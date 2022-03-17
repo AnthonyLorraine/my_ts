@@ -1,0 +1,96 @@
+{% load static %}
+<!doctype html>
+<html lang="en" style="min-height: 100%">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="{% static 'main/img/favicon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'main/css/bootstrap.min.css' %}">
+    <script src="{% static 'main/js/bootstrap.bundle.min.js' %}"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body class="" style="min-height: 100%;">
+<nav class="navbar navbar-dark bg-dark sticky-top">
+    {% if user.is_authenticated %}
+        <div>
+            <button class="btn btn-dark ms-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#menu"
+                    aria-controls="menu">
+             <span class="material-icons">
+            menu
+            </span>
+            </button>
+            <button class="btn btn-dark ms-n1" type="button">
+                <a class="material-icons text-decoration-none text-light" href="{% url 'home' %}">
+                    home
+                </a>
+            </button>
+        </div>
+        <h6 class="navbar-brand text-center align-middle mb-0">{{ user.get_full_name }}</h6>
+    {% else %}
+        <h6 class="ms-2 navbar-brand text-center align-middle mb-0">Time Sheets</h6>
+    {% endif %}
+
+</nav>
+<div class="offcanvas offcanvas-start" tabindex="-1" id="menu" aria-labelledby="menuLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="menuLabel"></h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <nav class="nav flex-column align-items-end mt-3">
+            {% if not user.is_manager %}
+                <a class="nav-link text-dark h3 py-2" href="{% url 'home' %}">My Time Sheets</a>
+            {% else %}
+                <a class="nav-link text-dark h3 py-2" href="{% url 'manager-team-member-list' %}">Staff Time
+                    Sheets</a>
+                <hr/>
+
+                <div class="nav-link text-dark h3 py-2">
+                    <div class="" id="setupTeamMenu"
+                         data-bs-toggle="dropdown" aria-expanded="false">
+                        Setup Team
+                    </div>
+                    <ul class="dropdown-menu w-100 border-end-0 border-start-0 rounded-0 border-dark border-1 text-end"
+                        aria-labelledby="setupTeamMenu">
+                        <li><a class="h3 dropdown-item py-3" href="{% url 'team-create' %}">Create a Team</a></li>
+                        <li><a class="h3 dropdown-item py-3" href="{% url 'team-list' %}">List of Teams</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-link text-dark h3 py-2">
+                    <div class="" id="appConfigMenu"
+                         data-bs-toggle="dropdown" aria-expanded="false">
+                        App Config
+                    </div>
+                    <ul class="dropdown-menu w-100 border-end-0 border-start-0 rounded-0 border-dark border-1 text-end "
+                        aria-labelledby="appConfigMenu">
+                        <li><a class="h3 dropdown-item py-3" href="{% url 'settings-list' %}">View Settings</a></li>
+                    </ul>
+                </div>
+            {% endif %}
+            {% if not user.team %}
+                <li><a class="h3 dropdown-item py-3" href="{% url 'team-list' %}">Join a Team</a></li>
+            {% else %}
+                {% if user.is_manager %}
+                    <li><a class="h3 dropdown-item py-3 text-danger" href="{% url 'team-leave-manager' user.team.pk %}">Leave
+                        Team</a></li>
+                {% else %}
+                    <li><a class="h3 dropdown-item py-3 text-danger" href="{% url 'team-leave-staff' user.team.pk %}">Leave
+                        Team</a></li>
+                {% endif %}
+            {% endif %}
+            <hr/>
+            <a class="nav-link text-dark h4 py-2 text-muted" href="{% url 'logout' %}">Log out</a>
+        </nav>
+    </div>
+</div>
+<div class="p-2">
+    {% block content %}
+    {% endblock %}
+</div>
+</body>
+</html>

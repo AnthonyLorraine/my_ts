@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}Team list{% endblock %}
+
+{% block content %}
+    <main class="container p-3 mt-3">
+        <h2>Teams</h2>
+        <ul class="list-group mt-5">
+            {% for team in team_list %}
+                <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2">
+                        <div class="h6 mb-0">{{ team.name }}</div>
+                        {% if team.manager %}
+                            <span class="fst-italic">{{ team.manager.get_full_name }}</span>
+                        {% else %}
+                            {% if not team.manager and not user.team %}
+                                <a href="{% url 'team-join-manager' team.id %}"
+                                   class="fst-italic text-muted text-decoration-none">
+                                    Manage Team
+                                </a>
+                            {% else %}
+                                No Manager
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    <div class="ms-auto">
+                        <div class="text-end p-2 pt-0 pb-4">
+                            <span class="badge bg-dark rounded-pill">{{ team.staff_count }}</span>
+                        </div>
+                        {% if user.team.id == team.id %}
+                            {% if team.manager == user %}
+                                <a href="{% url 'team-leave-manager' team.id %}"
+                                   class="btn btn-sm text-danger">
+                                    Leave
+                                </a>
+                            {% else %}
+                                <a href="{% url 'team-leave-staff' team.id %}" class="btn btn-sm text-danger">
+                                    Leave
+                                </a>
+                            {% endif %}
+                        {% elif user.team.id is None %}
+                            <a href="{% url 'team-join-staff' team.id %}" class="btn btn-sm ">
+                                Join
+                            </a>
+                        {% endif %}
+                        <a href="{% url 'team-view-members-list' team.id %}" class="btn btn-sm ">
+                            View
+                        </a>
+                        {% if user.is_manager %}
+                            <a href="{% url 'team-delete' team.slug %}" class="btn btn-sm btn-danger">
+                                Delete
+                            </a>
+                        {% endif %}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        {% if page_obj.paginator.num_pages > 1 %}
+            <nav aria-label="Page navigations">
+                <ul class="pagination justify-content-center mt-3">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+                        </li>
+                    {% endif %}
+                    {% for page in page_obj.paginator.page_range %}
+                        {% if page_obj.number == page %}
+                            <li class="page-item active"><a class="page-link" href="?page={{ page }}">{{ page }}</a>
+                            </li>
+                        {% else %}
+                            <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    {% include 'components/cancel_and_or_submit_button.html' with submit=False %}
+    {% if user.is_manager %}
+        <a class="position-fixed bottom-0 end-0 me-4 mb-4 border p-3 bg-dark"
+           style="border-radius: 20px; z-index: 3;"
+           href="{% url 'team-create' %}">
+            <span class="material-icons text-center align-middle text-white">add</span>
+        </a>
+    {% endif %}
+    </main>
+{% endblock %}
