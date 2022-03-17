@@ -7,7 +7,7 @@
 
         <h1 class="pb-3">Settings</h1>
         {% for setting in settings_list %}
-            <strong class="text-uppercase">{{ setting.name }}</strong>: <span class="text-muted ms-3 h6">{{ setting.value }}</span>
+            <strong class="text-uppercase">{{ setting.name }}</strong>: <span class="text-muted ms-3 h6">{{ setting.value }}</span> {% if setting.name == 'pay_period' %}<a href="{% url 'update-pay-period' %}">Update</a>{% endif %}
         {% endfor %}
     </main>
 

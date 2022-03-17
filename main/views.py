@@ -228,3 +228,8 @@ class ManagerTeamViewMembersListView(LoginRequiredMixin, ListView):
 class SettingsListView(LoginRequiredMixin, ListView):
     model = Settings
 
+
+class PayPeriodView(LoginRequiredMixin, RedirectView):
+    def get(self, request, *args, **kwargs):
+        Settings.update_pay_period()
+        return redirect('settings-list')

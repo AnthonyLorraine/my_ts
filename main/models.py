@@ -12,9 +12,15 @@ class Settings(models.Model):
     # Celery/Redis Task?
     @staticmethod
     def update_pay_period():
-        current_pay_period = Settings.objects.get(name='pay_period').value
+        today = datetime.today()
+        current_period = Settings.objects.get(name='pay_period')
+        current_pay_period = current_period.value
         next_pay_period = datetime.strptime(current_pay_period, '%d%m%Y') + timedelta(days=14)
-        return next_pay_period
+        if next_pay_period > today:
+            pass
+        else:
+            current_period.value = next_pay_period.strftime('%d%m%Y')
+            current_period.save()
 
     @staticmethod
     def get_pay_period():
