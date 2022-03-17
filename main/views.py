@@ -96,7 +96,7 @@ class TeamCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     fields = ['name']
 
     def test_func(self):
-        return self.request.user.groups.filter(name='Manager').exists()
+        return self.request.user.groups.filter(name='Manager').exists() or self.request.user.is_superuser
 
     def get_success_url(self):
         return reverse('team-list')
