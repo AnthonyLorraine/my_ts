@@ -1,0 +1,10 @@
+[
+  {
+    "model": "main.settings",
+    "pk": 1,
+    "fields": {
+      "name": "pay_period",
+      "value": "02032022"
+    }
+  }
+]
