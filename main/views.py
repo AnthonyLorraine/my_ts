@@ -64,7 +64,7 @@ class LogInView(LoginView):
     template_name = 'main/login_form.html'
 
 
-class RegisterEmployeeView(LoginRequiredMixin, CreateView):
+class RegisterEmployeeView(CreateView):
     model = Employee
     template_name = 'main/register_form.html'
     fields = '__all__'
