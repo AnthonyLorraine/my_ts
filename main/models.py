@@ -27,6 +27,10 @@ class PenaltyType(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def is_used(self):
+        return Penalty.objects.filter(penalty_type=self).count() > 0
+
 
 class Penalty(models.Model):
     name = models.TextField()

@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import inlineformset_factory
-from main.models import Timesheet, TimesheetRow
+from main.models import Timesheet, TimesheetRow, Penalty, PenaltyType
 
 
 class TimeSheetModelForm(forms.ModelForm):
@@ -18,3 +18,27 @@ class TimeSheetModelForm(forms.ModelForm):
         [field.widget.attrs.update({'class': 'form-control'}) for field in self.fields.values()]
 
 
+class PenaltyCreateModelForm(forms.ModelForm):
+    class Meta:
+        model = Penalty
+        fields = '__all__'
+        widgets = {
+            'name': forms.TextInput(attrs={'required': True, 'maxlength': 40}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        [field.widget.attrs.update({'class': 'form-control form-control-sm'}) for field in self.fields.values()]
+
+
+class PenaltyTypeCreateModelForm(forms.ModelForm):
+    class Meta:
+        model = PenaltyType
+        fields = '__all__'
+        widgets = {
+            'name': forms.TextInput(attrs={'required': True, 'maxlength': 40}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        [field.widget.attrs.update({'class': 'form-control form-control-sm'}) for field in self.fields.values()]

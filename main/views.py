@@ -9,8 +9,8 @@ from django.urls import reverse
 
 from django.views.generic import DetailView, CreateView, ListView, RedirectView, DeleteView, UpdateView
 
-from main.forms import TimeSheetModelForm
-from main.models import Employee, Timesheet, Team, PenaltyType, Settings
+from main.forms import TimeSheetModelForm, PenaltyCreateModelForm, PenaltyTypeCreateModelForm
+from main.models import Employee, Timesheet, Team, PenaltyType, Settings, Penalty
 
 
 class EmployeeDetailView(LoginRequiredMixin, DetailView):
@@ -54,6 +54,48 @@ class TimesheetCreateView(LoginRequiredMixin, CreateView):
 
 class TimesheetDetailView(LoginRequiredMixin, DetailView):
     model = Timesheet
+
+
+class PenaltyCreateView(LoginRequiredMixin, CreateView):
+    model = Penalty
+    form_class = PenaltyCreateModelForm
+
+    def get_success_url(self):
+        return reverse('penalty-create')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['penalties'] = Penalty.objects.all()
+        return context
+
+
+class PenaltyDeleteView(LoginRequiredMixin, DeleteView):
+    model = Penalty
+
+    def get_success_url(self):
+        return reverse('penalty-create')
+
+
+class PenaltyTypeCreateView(LoginRequiredMixin, CreateView):
+    model = PenaltyType
+    form_class = PenaltyTypeCreateModelForm
+
+    def get_success_url(self):
+        return reverse('penalty-type-create')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['penalty_types'] = PenaltyType.objects.all()
+        return context
+
+
+class PenaltyTypeDeleteView(LoginRequiredMixin, DeleteView):
+    model = PenaltyType
+
+    def get_success_url(self):
+        return reverse('penalty-type-create')
+
+
 
 
 class LogOffView(LoginRequiredMixin, LogoutView):

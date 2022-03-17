@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Create Penalty{% endblock %}
+{% block content %}
+    <section class="container pt-3">
+    <h1>Create Penalty</h1>
+        <table class="table table-sm mt-5">
+            <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Penalty Type
+                </th>
+                <th>
+                    Actions
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for p in penalties %}
+                <tr>
+                    <td>{{ p.name }}</td>
+                    <td>{{ p.penalty_type.name }}</td>
+                    <td>
+                        <a href="{% url 'penalty-delete' p.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <form method="post">{% csrf_token %}
+                <tfoot>
+                <tr>
+                    <td>
+                        {{ form.name }}
+                    </td>
+                    <td>
+                        {{ form.penalty_type }}
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-sm btn-success">Add</button>
+                    </td>
+                </tr>
+                </tfoot>
+            </form>
+
+
+        </table>
+{{ form.errors }}
+    </section>
+
+
+{% endblock %}

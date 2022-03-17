@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Create Penalty{% endblock %}
+{% block content %}
+    <section class="container pt-3">
+    <h1>Create Penalty Type</h1>
+        <table class="table table-sm mt-5">
+            <thead>
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Actions
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for p in penalty_types %}
+                <tr>
+                    <td>{{ p.name }}</td>
+                    <td>
+                        <a href="#" class="btn btn-sm btn-warning">Edit</a>
+                        {% if p.is_used %}
+                        <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="There are still penalties using this penalty type">
+                          <button class="btn btn-sm btn-danger" type="button" disabled>Delete</button>
+                        </span>
+                        {% else %}
+                        <a href="{% url 'penalty-type-delete' p.pk %}"
+                           class="btn btn-sm btn-danger">Delete</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <form method="post" class="">{% csrf_token %}
+                <tfoot>
+                <tr>
+                    <td>
+                        {{ form.name }}
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-sm btn-success">Add</button>
+                    </td>
+                </tr>
+                </tfoot>
+            </form>
+
+
+        </table>
+        {{ form.errors }}
+    </section>
+
+
+{% endblock %}

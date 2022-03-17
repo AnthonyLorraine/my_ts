@@ -64,6 +64,18 @@
                 </div>
 
                 <div class="nav-link text-dark h3 py-2">
+                    <div class="" id="setupPenaltyMenu"
+                         data-bs-toggle="dropdown" aria-expanded="false">
+                        Setup Penalty & Types
+                    </div>
+                    <ul class="dropdown-menu w-100 border-end-0 border-start-0 rounded-0 border-dark border-1 text-end"
+                        aria-labelledby="setupPenaltyMenu">
+                        <li><a class="h3 dropdown-item py-3" href="{% url 'penalty-create' %}">Create Penalty</a></li>
+                        <li><a class="h3 dropdown-item py-3" href="{% url 'penalty-type-create' %}">Create Penalty Type</a></li>
+                    </ul>
+                </div>
+
+                <div class="nav-link text-dark h3 py-2">
                     <div class="" id="appConfigMenu"
                          data-bs-toggle="dropdown" aria-expanded="false">
                         App Config

@@ -3,7 +3,8 @@ from django.conf.urls.static import static
 from django.urls import path
 from main.views import EmployeeDetailView, TimesheetCreateView, TimesheetDetailView, LogOffView, LogInView, \
     RegisterEmployeeView, TeamCreateView, TeamListView, TeamJoinStaffView, TeamJoinManagerView, TeamViewMembersListView, \
-    TeamLeaveStaffView, TeamLeaveManagerView, ManagerTeamViewMembersListView, SettingsListView, TeamDeleteView
+    TeamLeaveStaffView, TeamLeaveManagerView, ManagerTeamViewMembersListView, SettingsListView, TeamDeleteView, \
+    PenaltyCreateView, PenaltyTypeCreateView, PenaltyDeleteView, PenaltyTypeDeleteView
 
 urlpatterns = [
     path('', EmployeeDetailView.as_view(), name='home'),
@@ -13,6 +14,10 @@ urlpatterns = [
     path('register', RegisterEmployeeView.as_view(), name='register-employee'),
     path('create', TimesheetCreateView.as_view(), name='timesheet-create'),
     path('timesheet-detail/<int:pk>', TimesheetDetailView.as_view(), name='timesheet-detail'),
+    path('penalty-create', PenaltyCreateView.as_view(), name='penalty-create'),
+    path('penalty-delete/<int:pk>', PenaltyDeleteView.as_view(), name='penalty-delete'),
+    path('penalty-type-create', PenaltyTypeCreateView.as_view(), name='penalty-type-create'),
+    path('penalty-type-delete/<int:pk>', PenaltyTypeDeleteView.as_view(), name='penalty-type-delete'),
     path('team-create', TeamCreateView.as_view(), name='team-create'),
     path('team-delete/<slug:slug>', TeamDeleteView.as_view(), name='team-delete'),
     path('team-list', TeamListView.as_view(), name='team-list'),
