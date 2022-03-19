@@ -233,7 +233,7 @@ class Timesheet(models.Model):
                 else:
                     hours_remaining = self.end_date_time.hour + self.end_date_time.minute / 60
                 tsr = TimesheetRow.objects.create(date_worked=start.date(),
-                                                  hours_worked=round(hours_remaining) * 3600,
+                                                  worked_seconds=round(hours_remaining) * 3600,
                                                   payout_seconds=self.get_payout_amount_in_seconds(
                                                       day=start.date(),
                                                       hours=round(hours_remaining)),
