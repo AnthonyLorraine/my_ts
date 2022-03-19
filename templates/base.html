@@ -63,6 +63,8 @@
             {% endif %}
             {% if not user.team %}
                 <li><a class="h3 dropdown-item py-3" href="{% url 'team-list' %}">Join a Team</a></li>
+                {% elif user.team and not user.is_manager %}
+                <li><a class="h3 dropdown-item py-3" href="{% url 'team-leave-staff' user.team.id %}">Leave Team</a></li>
             {% endif %}
             <hr/>
             <a class="nav-link text-dark h4 py-2 text-muted" href="{% url 'logout' %}">Log out</a>
