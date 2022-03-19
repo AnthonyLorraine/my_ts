@@ -7,7 +7,10 @@
         <form method="post">{% csrf_token %}
             <h1 class="pb-4">Confirm Deletion</h1>
             Are you sure want to delete the "{{ object }}" Penalty?
-            {% include 'components/cancel_and_or_submit_button.html' with submit=True button_name="Delete" button_colour="danger" %}
+            <div class="d-flex flex-row justify-content-end">
+                <a class="btn p-3 px-5 mt-3 me-3" href="{{ request.META.HTTP_REFERER }}">Back</a>
+                <button type="submit" class="btn btn-danger p-3 px-5 mt-3">Delete</button>
+            </div>
         </form>
     </main>
 

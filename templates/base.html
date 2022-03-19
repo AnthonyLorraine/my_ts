@@ -35,6 +35,8 @@
     {% endif %}
 
 </nav>
+
+
 <div class="offcanvas offcanvas-start" tabindex="-1" id="menu" aria-labelledby="menuLabel">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="menuLabel"></h5>
@@ -51,59 +53,49 @@
                 <hr/>
             {% endif %}
             {% if user.is_superuser or user.is_manager %}
-                <div class="nav-link text-dark h3 py-2">
-                    <div class="" id="setupTeamMenu"
-                         data-bs-toggle="dropdown" aria-expanded="false">
-                        Setup Team
-                    </div>
-                    <ul class="dropdown-menu w-100 border-end-0 border-start-0 rounded-0 border-dark border-1 text-end"
-                        aria-labelledby="setupTeamMenu">
-                        <li><a class="h3 dropdown-item py-3" href="{% url 'team-create' %}">Create a Team</a></li>
-                        <li><a class="h3 dropdown-item py-3" href="{% url 'team-list' %}">List of Teams</a></li>
-                    </ul>
+                <div class="">
+                    <a href="#" class="nav-link text-dark h3" type="button" data-bs-toggle="offcanvas"
+                            data-bs-target="#menuSetup"
+                            aria-controls="menu">Setup
+                    </a>
                 </div>
-
-                <div class="nav-link text-dark h3 py-2">
-                    <div class="" id="setupPenaltyMenu"
-                         data-bs-toggle="dropdown" aria-expanded="false">
-                        Setup Penalty & Types
-                    </div>
-                    <ul class="dropdown-menu w-100 border-end-0 border-start-0 rounded-0 border-dark border-1 text-end"
-                        aria-labelledby="setupPenaltyMenu">
-                        <li><a class="h3 dropdown-item py-3" href="{% url 'penalty-create' %}">Create Penalty</a></li>
-                        <li><a class="h3 dropdown-item py-3" href="{% url 'penalty-type-create' %}">Create Penalty Type</a></li>
-                    </ul>
-                </div>
-
-                <div class="nav-link text-dark h3 py-2">
-                    <div class="" id="appConfigMenu"
-                         data-bs-toggle="dropdown" aria-expanded="false">
-                        App Config
-                    </div>
-                    <ul class="dropdown-menu w-100 border-end-0 border-start-0 rounded-0 border-dark border-1 text-end "
-                        aria-labelledby="appConfigMenu">
-                        <li><a class="h3 dropdown-item py-3" href="{% url 'settings-list' %}">View Settings</a></li>
-                    </ul>
-                </div>
-
 
             {% endif %}
             {% if not user.team %}
                 <li><a class="h3 dropdown-item py-3" href="{% url 'team-list' %}">Join a Team</a></li>
-            {% else %}
-                {% if user.is_manager %}
-                    <li><a class="h3 dropdown-item py-3 text-danger" href="{% url 'team-leave-manager' user.team.pk %}">Leave
-                        Team</a></li>
-                {% else %}
-                    <li><a class="h3 dropdown-item py-3 text-danger" href="{% url 'team-leave-staff' user.team.pk %}">Leave
-                        Team</a></li>
-                {% endif %}
             {% endif %}
             <hr/>
             <a class="nav-link text-dark h4 py-2 text-muted" href="{% url 'logout' %}">Log out</a>
         </nav>
     </div>
 </div>
+
+
+
+<div class="offcanvas offcanvas-start" tabindex="-1" id="menuSetup" aria-labelledby="menuSetupLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="menuSetupLabel"></h5>
+        <button class="btn-close text-reset" type="button" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <nav class="nav flex-column align-items-end mt-3">
+            <a class="nav-link text-dark h3 py-2" href="{% url 'team-create' %}">Create Team</a>
+            <a class="nav-link text-dark h3 py-2" href="{% url 'team-list' %}">All Teams</a>
+            <hr/>
+            <a class="nav-link text-dark h3 py-2" href="{% url 'penalty-create' %}">Create Penalty</a>
+            <a class="nav-link text-dark h3 py-2" href="{% url 'penalty-type-create' %}">Create Penalty Type</a>
+            <hr/>
+            <a class="nav-link text-dark h3 py-2" href="{% url 'settings-list' %}">View Settings</a>
+            <hr/>
+            <btn class="btn text-muted" type="button" data-bs-toggle="offcanvas" data-bs-target="#menu"
+                    aria-controls="menu">
+             Back
+            </btn>
+        </nav>
+    </div>
+</div>
+
+
 <div class="p-2">
     {% block content %}
     {% endblock %}

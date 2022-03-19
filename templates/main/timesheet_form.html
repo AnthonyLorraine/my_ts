@@ -21,6 +21,9 @@
             {{ form.penalty }}
             {{ form.penalty.label_tag }}
         </div>
-        {% include 'components/cancel_and_or_submit_button.html' with submit=True button_name="Save" %}
+            <div class="d-flex flex-row justify-content-end">
+                <a class="btn p-3 px-3 mt-3 me-3" href="{% url 'home' %}">Back</a>
+                <button type="submit" class="btn btn-dark p-3 px-5 mt-3">Create</button>
+            </div>
     </form>
 {% endblock %}

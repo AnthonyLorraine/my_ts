@@ -77,13 +77,15 @@
                 </ul>
             </nav>
         {% endif %}
-    {% include 'components/cancel_and_or_submit_button.html' with submit=False %}
-    {% if user.is_manager %}
-        <a class="position-fixed bottom-0 end-0 me-4 mb-4 border p-3 bg-dark"
-           style="border-radius: 20px; z-index: 3;"
-           href="{% url 'team-create' %}">
-            <span class="material-icons text-center align-middle text-white">add</span>
-        </a>
-    {% endif %}
+        <div class="d-flex flex-row justify-content-end">
+            <a class="btn p-3 px-3 mt-3 me-3" href="{% url 'home' %}">Back</a>
+        </div>
+        {% if user.is_manager %}
+            <a class="position-fixed bottom-0 end-0 me-4 mb-4 border p-3 bg-dark"
+               style="border-radius: 20px; z-index: 3;"
+               href="{% url 'team-create' %}">
+                <span class="material-icons text-center align-middle text-white">add</span>
+            </a>
+        {% endif %}
     </main>
 {% endblock %}

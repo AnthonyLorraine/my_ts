@@ -5,8 +5,7 @@
 {% block content %}
     <main class="container p-3">
     {% if not user == employee %}
-        <div class="d-flex flex-row justify-content-between "><h3 class="">{{ employee.get_full_name }}</h3><a class="btn btn-sm btn-dark" href="{{ request.META.HTTP_REFERER }}">Back</a></div>
-
+        <div class="d-flex flex-row justify-content-between align-items-center mt-3"><h3 class="m-0">{{ employee.get_full_name }}</h3><div><a class="btn btn-sm btn-dark me-2" href="{% url 'manager-team-member-list' %}">Back</a></div></div>
     {% endif %}
         <div class="d-flex flex-row justify-content-around my-4 mt-3">
             <div class="card m-2" style="width: 8rem;">
