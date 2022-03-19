@@ -218,7 +218,7 @@ class Timesheet(models.Model):
         # Worked Time is all within one day.
         if self.start_date_time.date() == self.end_date_time.date():
             tsr = TimesheetRow.objects.create(date_worked=self.start_date_time.date(),
-                                              hours_worked=self.duration,
+                                              worked_seconds=self.duration,
                                               payout_seconds=self.get_payout_amount_in_seconds(
                                                   day=self.start_date_time.date(),
                                                   hours=self.duration / 3600),
@@ -258,7 +258,7 @@ class Timesheet(models.Model):
 
 class TimesheetRow(models.Model):
     date_worked = models.DateField()
-    hours_worked = models.IntegerField()  # TODO Set name to worked_seconds on next refresh
+    worked_seconds = models.IntegerField()
     payout_seconds = models.IntegerField()
     timesheet = models.ForeignKey(Timesheet, on_delete=models.RESTRICT)
 
@@ -268,4 +268,10 @@ class TimesheetRow(models.Model):
 
     @property
     def worked_duration_str(self):
-        return f'{timedelta(seconds=self.hours_worked)}'
+        return f'{timedelta(seconds=self.worked_seconds)}'
+
+
+
+# Claiming time
+# Claim history
+# relate to timesheetrow

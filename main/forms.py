@@ -10,7 +10,7 @@ class TimeSheetModelForm(forms.ModelForm):
         widgets = {
             'employee': forms.TextInput(attrs={'hidden': True}),
             'start_date_time': forms.DateTimeInput(attrs={'required': True, 'type': 'datetime-local', 'max': '2100-01-01T00:00', 'min': '2020-01-01T00:00', 'placeholder': 'Start Date Time'}),
-            'duration': forms.TextInput(attrs={'required': True, 'maxlength': 4, 'placeholder': 'Duration'}),
+            'duration': forms.TextInput(attrs={'type': 'number', 'required': True, 'maxlength': 4, 'placeholder': 'Duration', 'min': 1, 'max': 86400}),
         }
 
     def __init__(self, *args, **kwargs):
