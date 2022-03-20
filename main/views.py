@@ -3,13 +3,13 @@ from datetime import datetime, timedelta
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LogoutView, LoginView
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse
 
 from django.views.generic import DetailView, CreateView, ListView, RedirectView, DeleteView, UpdateView
 
-from main.forms import TimeSheetModelForm, PenaltyCreateModelForm, PenaltyTypeCreateModelForm
+from main.forms import TimeSheetModelForm, PenaltyCreateModelForm, PenaltyTypeCreateModelForm, EmployeeUpdateModelForm
 from main.models import Employee, Timesheet, Team, PenaltyType, Settings, Penalty
 
 
@@ -30,6 +30,15 @@ class EmployeeDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
+class EmployeeUpdateView(LoginRequiredMixin, UpdateView):
+    model = Employee
+    form_class = EmployeeUpdateModelForm
+    template_name = 'main/employee_form.html'
+
+    def get_success_url(self):
+        return reverse('employee-detail', kwargs={'slug': self.object.slug})
+
+
 class TimesheetCreateView(LoginRequiredMixin, CreateView):
     model = Timesheet
     form_class = TimeSheetModelForm
@@ -40,16 +49,13 @@ class TimesheetCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse('home')
 
-    def get_form_kwargs(self):
-        form_kwargs = super(TimesheetCreateView, self).get_form_kwargs()
-        try:
-            data = form_kwargs['data'].copy()
-            data['duration'] = str(int(form_kwargs['data']['duration']) * 60)
-            data['employee'] = str(self.request.user.pk)
-            form_kwargs['data'] = data
-        except KeyError:
-            pass
-        return form_kwargs
+    def form_valid(self, form):
+        self.object: Timesheet = form.save(commit=False)
+        self.object.employee = self.request.user
+        seconds = self.object.duration
+        self.object.duration = round(seconds * 60)
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class TimesheetDetailView(LoginRequiredMixin, DetailView):
@@ -94,8 +100,6 @@ class PenaltyTypeDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_success_url(self):
         return reverse('penalty-type-create')
-
-
 
 
 class LogOffView(LoginRequiredMixin, LogoutView):

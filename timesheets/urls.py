@@ -4,11 +4,12 @@ from django.urls import path
 from main.views import EmployeeDetailView, TimesheetCreateView, TimesheetDetailView, LogOffView, LogInView, \
     RegisterEmployeeView, TeamCreateView, TeamListView, TeamJoinStaffView, TeamJoinManagerView, TeamViewMembersListView, \
     TeamLeaveStaffView, TeamLeaveManagerView, ManagerTeamViewMembersListView, SettingsListView, TeamDeleteView, \
-    PenaltyCreateView, PenaltyTypeCreateView, PenaltyDeleteView, PenaltyTypeDeleteView, PayPeriodView
+    PenaltyCreateView, PenaltyTypeCreateView, PenaltyDeleteView, PenaltyTypeDeleteView, PayPeriodView, EmployeeUpdateView
 
 urlpatterns = [
     path('', EmployeeDetailView.as_view(), name='home'),
     path('employee/<slug:slug>', EmployeeDetailView.as_view(), name='employee-detail'),
+    path('employee-update/<slug:slug>', EmployeeUpdateView.as_view(), name='employee-update'),
     path('logout', LogOffView.as_view(), name='logout'),
     path('login', LogInView.as_view(), name='login'),
     path('register', RegisterEmployeeView.as_view(), name='register-employee'),

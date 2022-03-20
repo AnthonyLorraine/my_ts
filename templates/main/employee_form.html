@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+
+
+{% block content %}
+    <main class="container p-3">
+        {% if not user == employee %}
+            <div class="d-flex flex-row justify-content-between align-items-center mt-3"><h3 class="m-0">
+                Edit {{ employee.get_full_name }}</h3>
+                <div><a class="btn btn-sm btn-dark me-2" href="{% url 'manager-team-member-list' %}">Back</a></div>
+            </div>
+            {% else %}
+            <div class="d-flex flex-row justify-content-between align-items-center mt-3"><h3 class="m-0">
+                Edit {{ user.get_full_name }}</h3>
+                <div><a class="btn btn-sm btn-dark me-2" href="{% url 'home' %}">Back</a></div>
+            </div>
+        {% endif %}
+        <form method="post" class="mt-4">{% csrf_token %}
+            {% for field in form %}
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control {% if field.errors %}is-invalid{% endif %}"
+                           id="id_{{ field.name }}"
+                           name="{{ field.name }}" autocapitalize="none"
+                           placeholder="{{ field.name }}" value="{{ field.value }}"
+                           aria-describedby="{{ field.name }}Feedback">
+                    <label for="id_{{ field.name }}">{{ field.label }}</label>
+                    <div id="{{ field.name }}Feedback" class="invalid-feedback">
+                        {{ field.errors.as_p }}
+                    </div>
+                </div>
+
+            {% endfor %}
+
+
+
+            <div class="d-flex flex-row justify-content-end">
+                <button type="submit" class="btn btn-dark p-3 px-5 mt-3">Update</button>
+            </div>
+        </form>
+
+    </main>
+{% endblock %}
