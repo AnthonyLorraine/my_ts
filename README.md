@@ -1,10 +1,10 @@
 #Overtime Tracking App
 
 ## Overview
-###Purpose
+### Purpose
 Track any overtime performed during an on-call, change window or any similar timeframe scenarios.
 
-##Installation
+## Installation
 1. Create new app on Heroku
 2. Link to project on github
 3. Wait for deployment
@@ -12,7 +12,7 @@ Track any overtime performed during an on-call, change window or any similar tim
 5. Create a superuser in the Heroku admin panel `manage.py createsuperuser`
 6. Setup the teams, penalties and penalty types for time sheets to be entered.
 
-##Features
+## Features
 ### Teams
 Allowing for a dedicated manager means tracking overtime for employees
 
