@@ -49,6 +49,7 @@ class Penalty(models.Model):
 class Employee(AbstractUser):
     team = models.ForeignKey('Team', on_delete=models.RESTRICT, null=True, blank=True)
     slug = autoslug.AutoSlugField(populate_from='get_full_name', unique=True, null=True)
+    tutorial_done = models.BooleanField(default=False)
 
     def add_timesheet(self, start_date_time: datetime, duration: int, penalty: Penalty):
         ts = Timesheet.objects.create(employee=self,
