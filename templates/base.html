@@ -67,8 +67,10 @@
                 <li><a class="h3 dropdown-item py-3" href="{% url 'team-leave-staff' user.team.id %}">Leave Team</a></li>
             {% endif %}
             <hr/>
+        {% if user.is_authenticated %}
             <a class="nav-link text-dark h4 py-2" href="{% url 'employee-update' user.slug %}">Profile</a>
             <a class="nav-link text-dark h4 py-2 text-muted" href="{% url 'logout' %}">Log out</a>
+        {% endif %}
         </nav>
     </div>
 </div>
