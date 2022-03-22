@@ -1,6 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from main.models import Timesheet, TimesheetRow, Penalty, PenaltyType, Employee
+from main.models import Timesheet, Penalty, PenaltyType, Employee, PenaltyClaim
 
 
 class TimeSheetModelForm(forms.ModelForm):
@@ -8,13 +8,17 @@ class TimeSheetModelForm(forms.ModelForm):
         model = Timesheet
         fields = ['start_date_time', 'duration', 'penalty']
         widgets = {
-            'start_date_time': forms.DateTimeInput(attrs={'type': 'datetime-local', 'max': '2100-01-01T00:00', 'min': '2020-01-01T00:00', 'placeholder': 'Start Date Time'}),
+            'start_date_time': forms.DateTimeInput(
+                attrs={'type': 'datetime-local', 'max': '2100-01-01T00:00', 'min': '2020-01-01T00:00',
+                       'placeholder': 'Start Date Time'}),
             'duration': forms.TextInput(attrs={'type': 'number', 'placeholder': 'Duration'}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        [field.widget.attrs.update({'class': 'form-control', 'aria-describedby': f'{str(field.label).replace(" ", "").lower()}Feedback'}) for field in self.fields.values()]
+        [field.widget.attrs.update(
+            {'class': 'form-control', 'aria-describedby': f'{str(field.label).replace(" ", "").lower()}Feedback'}) for
+         field in self.fields.values()]
 
     def clean_duration(self):
         data = self.cleaned_data['duration']
@@ -25,6 +29,38 @@ class TimeSheetModelForm(forms.ModelForm):
             raise ValidationError('Duration must be a positive number.',
                                   code='invalid')
 
+        return data
+
+    def clean(self):
+        for field in self.errors:
+            self.fields[field].widget.attrs.update({'class': 'form-control is-invalid'})
+        for field in self.cleaned_data:
+            self.fields[field].widget.attrs.update({'class': 'form-control is-valid'})
+        return super().clean()
+
+
+class ClaimPenaltyForm(forms.ModelForm):
+    class Meta:
+        model = PenaltyClaim
+        fields = ['claimed_seconds', 'penalty']
+        widgets = {
+            'claimed_seconds': forms.TextInput(attrs={'type': 'number', 'placeholder': 'Duration'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        [field.widget.attrs.update(
+            {'class': 'form-control', 'aria-describedby': f'{str(field.label).replace(" ", "").lower()}Feedback'}) for
+         field in self.fields.values()]
+
+    def clean_claimed_seconds(self):
+        data = self.cleaned_data['claimed_seconds']
+        if data > 1440:
+            raise ValidationError('Duration over 24 hours. Max 1440 minutes allowed',
+                                  code='invalid')
+        if data < 1:
+            raise ValidationError('Duration must be a positive number.',
+                                  code='invalid')
         return data
 
     def clean(self):

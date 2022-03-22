@@ -4,9 +4,13 @@
 
 {% block content %}
     <main class="container p-3">
-    {% if not user == employee %}
-        <div class="d-flex flex-row justify-content-between align-items-center mt-3"><h3 class="m-0">{{ employee.get_full_name }}</h3><div><a class="btn btn-sm btn-success me-2" href="{% url 'employee-update' employee.slug %}">Edit</a><a class="btn btn-sm btn-dark me-2" href="{% url 'manager-team-member-list' %}">Back</a></div></div>
-    {% endif %}
+        {% if not user == employee %}
+            <div class="d-flex flex-row justify-content-between align-items-center mt-3"><h3
+                    class="m-0">{{ employee.get_full_name }}</h3>
+                <div><a class="btn btn-sm btn-success me-2" href="{% url 'employee-update' employee.slug %}">Edit</a><a
+                        class="btn btn-sm btn-dark me-2" href="{% url 'manager-team-member-list' %}">Back</a></div>
+            </div>
+        {% endif %}
         <div class="d-flex flex-row justify-content-around my-4 mt-3">
             <div class="card m-2" style="width: 8rem;">
                 <div class="card-body text-center">
@@ -30,22 +34,26 @@
         </div>
 
         <div class="">
-            <h3 class="py-3">Pay Period <br /><small class="text-muted">{{ pay_period_start|date:'d/m/Y' }} - {{ pay_period_end|date:'d/m/Y' }}</small></h3>
+            <h3 class="py-3">Pay Period <br/><small class="text-muted">{{ pay_period_start|date:'d/m/Y' }}
+                - {{ pay_period_end|date:'d/m/Y' }}</small></h3>
             <div id="pay_period_items" class="accordion accordion-flush">
-            {% if not  employee.pay_period_time_sheets %}
-                <small class="fst-italic">{% if employee == user %}You {% else %}They {% endif %}have no time sheets for this period</small>
-            {% endif %}
+                {% if not  employee.pay_period_time_sheets %}
+                    <small class="fst-italic">{% if employee == user %}You {% else %}They {% endif %}have no time sheets
+                        for this period</small>
+                {% endif %}
                 {% for time_sheet in employee.pay_period_time_sheets %}
 
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="heading-pay-{{ time_sheet.pk }}">
-                            <button class="accordion-button {% if forloop.counter != 1 %}collapsed{% endif %}" type="button" data-bs-toggle="collapse"
+                            <button class="accordion-button {% if forloop.counter != 1 %}collapsed{% endif %}"
+                                    type="button" data-bs-toggle="collapse"
                                     data-bs-target="#collapse-pay-{{ time_sheet.pk }}" aria-expanded="false"
                                     aria-controls="collapse-pay-{{ time_sheet.pk }}">
                                 {{ time_sheet.start_date_time|date:"d M Y" }}
                             </button>
                         </h2>
-                        <div id="collapse-pay-{{ time_sheet.pk }}" class="accordion-collapse collapse {% if forloop.counter == 1 %}show{% endif %}"
+                        <div id="collapse-pay-{{ time_sheet.pk }}"
+                             class="accordion-collapse collapse {% if forloop.counter == 1 %}show{% endif %}"
                              aria-labelledby="heading-pay-{{ time_sheet.pk }}" data-bs-parent="#pay_period_items">
                             <div class="accordion-body">
                                 <div class="d-flex flex-column">
@@ -68,12 +76,13 @@
             </div>
         </div>
 
-    <div class="mt-2 pb-5">
+        <div class="mt-2 pb-5">
             <h3 class="py-3">Last 5 Time Sheets</h3>
             <div id="recent_items" class="accordion accordion-flush pb-5">
-            {% if not  employee.last_5_time_sheets %}
-                <small class="fst-italic">{% if employee == user %}You {% else %}They {% endif %}haven't submitted any time sheets in a prior pay period</small>
-            {% endif %}
+                {% if not  employee.last_5_time_sheets %}
+                    <small class="fst-italic">{% if employee == user %}You {% else %}They {% endif %}haven't submitted
+                        any time sheets in a prior pay period</small>
+                {% endif %}
                 {% for time_sheet in employee.last_5_time_sheets %}
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="heading-{{ time_sheet.pk }}">
@@ -108,10 +117,18 @@
 
     </main>
     {% if user == employee and user.team %}
-    <a class="position-fixed bottom-0 end-0 me-4 mb-4 border p-3 bg-dark"
-       style="border-radius: 20px; z-index: 3;"
-       href="{% url 'timesheet-create' %}">
-        <span class="material-icons text-center align-middle text-white">add</span>
-    </a>
+        <div class="position-fixed bottom-0 end-0 me-4 mb-4 d-flex flex-row align-content-between">
+        <a class="border p-3 bg-dark"
+           style="border-radius: 20px; z-index: 3;"
+           href="{% url 'timesheet-create' %}">
+            <span class="material-icons text-center align-middle text-white">add</span>
+        </a>
+        <a class="border p-3 bg-success mx-3"
+           style="border-radius: 20px; z-index: 3;"
+           href="{% url 'penalty-claim' %}">
+            <span class="material-icons text-center align-middle text-white">paid</span>
+        </a>
+        </div>
+
     {% endif %}
 {% endblock %}

@@ -37,10 +37,18 @@ class PenaltyType(models.Model):
     def is_used(self):
         return Penalty.objects.filter(penalty_type=self).count() > 0
 
+    def available_employee_time(self, employee: 'Employee'):
+        employee_timesheets = Timesheet.objects.filter(penalty__penalty_type=self, employee=employee)
+        employee_claims = PenaltyClaim.objects.filter(employee=employee, penalty=self)
+        available_time = sum([ts.payout_duration_str.total_seconds()/3600 for ts in employee_timesheets if not ts.expired ])
+        claimed_time = sum([claim.claimed_seconds/3600 for claim in employee_claims])
+        return available_time - claimed_time
+
 
 class Penalty(models.Model):
     name = models.TextField()
     penalty_type = models.ForeignKey(PenaltyType, on_delete=models.RESTRICT)
+    valid_for_day_count = models.IntegerField(default=14)
 
     def __str__(self):
         return self.name
@@ -57,6 +65,23 @@ class Employee(AbstractUser):
                                       duration=duration,
                                       penalty=penalty)
         ts.save()
+
+    def claim_penalty(self, penalty: Penalty, claimed_seconds: int):
+        if self.can_claim(penalty, claimed_seconds):
+            claimed = PenaltyClaim.objects.create(employee=self,
+                                                  penalty=penalty,
+                                                  claimed_seconds=claimed_seconds)
+            claimed.save()
+        else:
+            print('Employee doesn\'t have enough time available to make this claim.')
+
+    def can_claim(self, penalty: Penalty, amount_to_claim: int) -> bool:
+        employee_time_sheets = Timesheet.objects.filter(employee=self, penalty=penalty)
+        available_time = sum([ts.payout_duration_str for ts in employee_time_sheets if not ts.expired])
+        if available_time >= amount_to_claim:
+            return True
+        else:
+            return False
 
     @property
     def last_5_time_sheets(self):
@@ -83,6 +108,15 @@ class Employee(AbstractUser):
         return time_sheets.count()
 
     @property
+    def duration_per_penalty(self):
+        penalties = PenaltyType.objects.all()
+        durations = []
+        for penalty in penalties:
+            durations.append({'penalty': penalty,
+                              'available': penalty.available_employee_time(self)})
+        return durations
+
+    @property
     def duration_outstanding_per_penalty_type(self):
         time_sheet = Timesheet.objects.filter(employee=self)
         penalty_types = PenaltyType.objects.all()
@@ -91,9 +125,9 @@ class Employee(AbstractUser):
             time = {}
             timer = 0
             for tsr in time_sheet:
-                if tsr.penalty.penalty_type.name == pt.name:
+                if tsr.penalty.penalty_type.name == pt.name and not tsr.expired:
                     timer += tsr.payout_duration_str.total_seconds() / 3600
-            time[pt.name] = timer
+            time[pt.name] = round(timer)
             duration.append(time)
         return duration
 
@@ -130,9 +164,9 @@ class Team(models.Model):
             time = {}
             timer = 0
             for tsr in time_sheets:
-                if tsr.penalty.penalty_type.name == pt.name:
+                if tsr.penalty.penalty_type.name == pt.name and not tsr.expired:
                     timer += tsr.payout_duration_str.total_seconds() / 3600
-            time[pt.name] = timer
+            time[pt.name] = round(timer)
             duration.append(time)
         return duration
 
@@ -184,6 +218,15 @@ class Timesheet(models.Model):
     start_date_time = models.DateTimeField()
     duration = models.IntegerField()
     penalty = models.ForeignKey(Penalty, on_delete=models.RESTRICT)
+
+    @property
+    def expired(self):
+
+        today = datetime.today()
+        if self.start_date_time + timedelta(self.penalty.valid_for_day_count) <= today:
+            return False
+        else:
+            return True
 
     @property
     def rows(self):
@@ -272,7 +315,15 @@ class TimesheetRow(models.Model):
         return f'{timedelta(seconds=self.worked_seconds)}'
 
 
+class PenaltyClaim(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.RESTRICT)
+    claimed_seconds = models.IntegerField(verbose_name='Duration')
+    penalty = models.ForeignKey(PenaltyType, on_delete=models.RESTRICT)
+    claim_date = models.DateField(auto_now_add=True)
 
-# Claiming time
-# Claim history
-# relate to timesheetrow
+    def save(self, *args, **kwargs):
+        if self.penalty.available_employee_time(self.employee) <= 0:
+            print('Not enough available time')
+        else:
+            super(PenaltyClaim, self).save(*args, **kwargs)
+

@@ -9,8 +9,9 @@ from django.urls import reverse
 
 from django.views.generic import DetailView, CreateView, ListView, RedirectView, DeleteView, UpdateView
 
-from main.forms import TimeSheetModelForm, PenaltyCreateModelForm, PenaltyTypeCreateModelForm, EmployeeUpdateModelForm
-from main.models import Employee, Timesheet, Team, PenaltyType, Settings, Penalty
+from main.forms import TimeSheetModelForm, PenaltyCreateModelForm, PenaltyTypeCreateModelForm, EmployeeUpdateModelForm, \
+    ClaimPenaltyForm
+from main.models import Employee, Timesheet, Team, PenaltyType, Settings, Penalty, PenaltyClaim
 
 
 class EmployeeDetailView(LoginRequiredMixin, DetailView):
@@ -50,7 +51,9 @@ class TimesheetCreateView(LoginRequiredMixin, CreateView):
         return reverse('home')
 
     def form_valid(self, form):
+
         self.object: Timesheet = form.save(commit=False)
+
         self.object.employee = self.request.user
         seconds = self.object.duration
         self.object.duration = round(seconds * 60)
@@ -60,6 +63,23 @@ class TimesheetCreateView(LoginRequiredMixin, CreateView):
 
 class TimesheetDetailView(LoginRequiredMixin, DetailView):
     model = Timesheet
+
+
+class PenaltyClaimView(LoginRequiredMixin, CreateView):
+    model = PenaltyClaim
+    form_class = ClaimPenaltyForm
+    template_name = 'main/claim_form.html'
+
+    def get_success_url(self):
+        return reverse('home')
+
+    def form_valid(self, form):
+        self.object: PenaltyClaim = form.save(commit=False)
+        self.object.employee = self.request.user
+        minutes = self.object.claimed_seconds
+        self.object.claimed_seconds = round(minutes * 60)
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class PenaltyCreateView(LoginRequiredMixin, CreateView):
