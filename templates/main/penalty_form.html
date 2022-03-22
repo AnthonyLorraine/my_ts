@@ -12,6 +12,7 @@
                 <th>
                     Penalty Type
                 </th>
+                <th>Days Valid</th>
                 <th>
                     Actions
                 </th>
@@ -22,6 +23,7 @@
                 <tr>
                     <td>{{ p.name }}</td>
                     <td>{{ p.penalty_type.name }}</td>
+                    <td>{{ p.valid_for_day_count }}</td>
                     <td>
                         <a href="{% url 'penalty-delete' p.pk %}" class="btn btn-sm btn-danger">Delete</a>
                     </td>
@@ -34,9 +36,11 @@
                     <td>
                         {{ form.name }}
                     </td>
+
                     <td>
                         {{ form.penalty_type }}
                     </td>
+                    <td>{{ form.valid_for_day_count }}</td>
                     <td>
                         <button type="submit" class="btn btn-sm btn-success">Add</button>
                     </td>
