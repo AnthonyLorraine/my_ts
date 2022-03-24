@@ -19,15 +19,12 @@
                         Sheet{% if employee.total_time_sheets_submitted > 1 %}s{% endif %}</h6>
                 </div>
             </div>
-            {% for penalty_type in employee.duration_outstanding_per_penalty_type %}
+            {% for duration in employee.duration_per_penalty %}
                 <div class="card m-2" style="width: 8rem;">
                     <div class="card-body text-center">
-                        {% for key, value in penalty_type.items %}
-                            <h3 class="card-title pb-2">{{ value }}
-                            </h3>
-                            <h6 class="card-subtitle mb-1 text-muted">
-                                Hrs {{ key|lower|capfirst }}</h6>
-                        {% endfor %}
+                    <h3>{{ duration.available|floatformat:2 }}</h3>
+                    <h6>{{ duration.penalty_type.name|lower|capfirst }} hrs</h6>
+
                     </div>
                 </div>
             {% endfor %}
@@ -58,12 +55,12 @@
                             <div class="accordion-body">
                                 <div class="d-flex flex-column">
                                     <div class="d-flex flex-row justify-content-between">
-                                        <div class="align-middle">Worked: {{ time_sheet.duration_str }}</div>
+                                        <div class="align-middle">Worked: {{ time_sheet.duration }}</div>
                                         <a href="{% url 'timesheet-detail' time_sheet.pk %}"
                                            class="btn btn-sm btn-outline-dark py-0">View</a>
                                     </div>
                                     <div>
-                                        Accrued: {{ time_sheet.payout_duration_str }}
+                                        Accrued: {{ time_sheet.accrued_duration }}
                                     </div>
                                     <div>
                                         Type: {{ time_sheet.penalty.penalty_type.name|lower|capfirst }}
@@ -97,12 +94,12 @@
                             <div class="accordion-body">
                                 <div class="d-flex flex-column">
                                     <div class="d-flex flex-row justify-content-between">
-                                        <div class="align-middle">Worked: {{ time_sheet.duration_str }}</div>
+                                        <div class="align-middle">Worked: {{ time_sheet.duration }}</div>
                                         <a href="{% url 'timesheet-detail' time_sheet.pk %}"
                                            class="btn btn-sm btn-outline-dark py-0">View</a>
                                     </div>
                                     <div>
-                                        Accrued: {{ time_sheet.payout_duration_str }}
+                                        Accrued: {{ time_sheet.accrued_duration }}
                                     </div>
                                     <div>
                                         Type: {{ time_sheet.penalty.penalty_type.name|lower|capfirst }}

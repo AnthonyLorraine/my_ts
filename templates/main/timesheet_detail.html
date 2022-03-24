@@ -33,16 +33,16 @@
                 {% for tsr in timesheet.rows %}
                     <tr>
                         <td>{{ tsr.date_worked }}</td>
-                        <td>{{ tsr.worked_duration_str }}</td>
-                        <td>{{ tsr.payout_duration_str }}</td>
+                        <td>{{ tsr.duration }}</td>
+                        <td>{{ tsr.accrued_duration }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
                 <tfoot>
                 <tr>
                     <td>&nbsp;</td>
-                    <td>{{ timesheet.duration_str }}</td>
-                    <td>{{ timesheet.payout_duration_str }}</td>
+                    <td>{{ timesheet.duration }}</td>
+                    <td>{{ timesheet.accrued_duration }}</td>
                 </tr>
                 </tfoot>
             </table>

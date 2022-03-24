@@ -1,12 +1,12 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from main.models import Timesheet, Penalty, PenaltyType, Employee, PenaltyClaim
+from main.models import Timesheet, Penalty, PenaltyType, Employee, Claim
 
 
 class TimeSheetModelForm(forms.ModelForm):
     class Meta:
         model = Timesheet
-        fields = ['start_date_time', 'duration', 'penalty']
+        fields = ['start_date_time', '_duration', 'penalty']
         widgets = {
             'start_date_time': forms.DateTimeInput(
                 attrs={'type': 'datetime-local', 'max': '2100-01-01T00:00', 'min': '2020-01-01T00:00',
@@ -21,7 +21,7 @@ class TimeSheetModelForm(forms.ModelForm):
          field in self.fields.values()]
 
     def clean_duration(self):
-        data = self.cleaned_data['duration']
+        data = self.cleaned_data['_duration']
         if data > 1440:
             raise ValidationError('Duration over 24 hours. Max 1440 minutes allowed',
                                   code='invalid')
@@ -39,12 +39,13 @@ class TimeSheetModelForm(forms.ModelForm):
         return super().clean()
 
 
-class ClaimPenaltyForm(forms.ModelForm):
+class ClaimForm(forms.ModelForm):
     class Meta:
-        model = PenaltyClaim
-        fields = ['claimed_seconds', 'penalty']
+        model = Claim
+        fields = ['employee','penalty_type', 'claimed_seconds' ]
         widgets = {
             'claimed_seconds': forms.TextInput(attrs={'type': 'number', 'placeholder': 'Duration'}),
+            'employee': forms.HiddenInput(),
         }
 
     def __init__(self, *args, **kwargs):
@@ -54,14 +55,19 @@ class ClaimPenaltyForm(forms.ModelForm):
          field in self.fields.values()]
 
     def clean_claimed_seconds(self):
-        data = self.cleaned_data['claimed_seconds']
-        if data > 1440:
+        claimed_seconds = self.cleaned_data['claimed_seconds']
+        employee = self.cleaned_data['employee']
+        penalty_type = self.cleaned_data['penalty_type']
+        available_seconds = penalty_type.calculate_available_employee_time(employee)
+        if claimed_seconds > 1440:
             raise ValidationError('Duration over 24 hours. Max 1440 minutes allowed',
                                   code='invalid')
-        if data < 1:
+        if claimed_seconds < 1:
             raise ValidationError('Duration must be a positive number.',
                                   code='invalid')
-        return data
+        if claimed_seconds > available_seconds:
+            raise ValidationError(f'Penalty type only has {abs(round(available_seconds/3600, 2))} hours available.')
+        return claimed_seconds
 
     def clean(self):
         for field in self.errors:

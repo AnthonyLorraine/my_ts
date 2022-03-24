@@ -1,17 +1,19 @@
 from datetime import datetime, timedelta
 
+from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LogoutView, LoginView
+from django.core.exceptions import ValidationError
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse
 
 from django.views.generic import DetailView, CreateView, ListView, RedirectView, DeleteView, UpdateView
 
-from main.forms import TimeSheetModelForm, PenaltyCreateModelForm, PenaltyTypeCreateModelForm, EmployeeUpdateModelForm, \
-    ClaimPenaltyForm
-from main.models import Employee, Timesheet, Team, PenaltyType, Settings, Penalty, PenaltyClaim
+from main.forms import TimeSheetModelForm, PenaltyCreateModelForm, PenaltyTypeCreateModelForm, \
+    EmployeeUpdateModelForm, ClaimForm
+from main.models import Employee, Timesheet, Team, PenaltyType, Settings, Penalty, Claim
 
 
 class EmployeeDetailView(LoginRequiredMixin, DetailView):
@@ -25,6 +27,7 @@ class EmployeeDetailView(LoginRequiredMixin, DetailView):
             return self.request.user
 
     def get_context_data(self, *, object_list=None, **kwargs):
+        messages.info(self.request, 'TEST')
         context = super().get_context_data()
         context['pay_period_start'] = Settings.get_pay_period()
         context['pay_period_end'] = context['pay_period_start'] + timedelta(days=14)
@@ -51,12 +54,11 @@ class TimesheetCreateView(LoginRequiredMixin, CreateView):
         return reverse('home')
 
     def form_valid(self, form):
-
         self.object: Timesheet = form.save(commit=False)
-
         self.object.employee = self.request.user
-        seconds = self.object.duration
-        self.object.duration = round(seconds * 60)
+
+        seconds = self.object.duration.total_seconds()
+        self.object._duration = round(seconds * 60)
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 
@@ -65,21 +67,31 @@ class TimesheetDetailView(LoginRequiredMixin, DetailView):
     model = Timesheet
 
 
-class PenaltyClaimView(LoginRequiredMixin, CreateView):
-    model = PenaltyClaim
-    form_class = ClaimPenaltyForm
+class ClaimCreateView(LoginRequiredMixin, CreateView):
+    model = Claim
+    form_class = ClaimForm
     template_name = 'main/claim_form.html'
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['employee'] = self.request.user
+        return initial
 
     def get_success_url(self):
         return reverse('home')
 
     def form_valid(self, form):
-        self.object: PenaltyClaim = form.save(commit=False)
+        self.object: Claim = form.save(commit=False)
         self.object.employee = self.request.user
+
         minutes = self.object.claimed_seconds
         self.object.claimed_seconds = round(minutes * 60)
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
+
+
+
+
 
 
 class PenaltyCreateView(LoginRequiredMixin, CreateView):
@@ -193,7 +205,10 @@ class TeamListView(LoginRequiredMixin, ListView):
 class TeamJoinStaffView(LoginRequiredMixin, RedirectView):
     def get(self, request, *args, **kwargs):
         team = Team.objects.get(id=kwargs['team_id'])
-        team.add_staff(self.request.user)
+        try:
+            team.add_employee(self.request.user)
+        except ValidationError:
+            messages.error(self.request, f'You\'re already in a team, please leave your team first.')
         team.save()
         return redirect('team-list')
 
@@ -201,8 +216,7 @@ class TeamJoinStaffView(LoginRequiredMixin, RedirectView):
 class TeamLeaveStaffView(LoginRequiredMixin, RedirectView):
     def get(self, request, *args, **kwargs):
         team = Team.objects.get(id=kwargs['team_id'])
-        team.remove_staff(self.request.user)
-        team.save()
+        team.remove_employee(self.request.user)
         return redirect(self.request.META['HTTP_REFERER'])
 
 

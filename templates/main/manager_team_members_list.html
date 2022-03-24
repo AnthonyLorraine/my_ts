@@ -20,10 +20,8 @@
             {% for employee in employee_list %}
                 <tr>
                     <td><a href="{% url 'employee-detail' employee.slug %}">{{ employee.get_full_name }}</a></td>
-                    {% for penalty_type in employee.duration_outstanding_per_penalty_type %}
-                        {% for key, value in penalty_type.items %}
-                            <td>{{ value }}</td>
-                        {% endfor %}
+                    {% for penalty_type in employee.duration_per_penalty %}
+                        <td>{{ penalty_type.available|floatformat:2 }}</td>
                     {% endfor %}
                 </tr>
             {% endfor %}

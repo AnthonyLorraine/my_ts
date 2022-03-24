@@ -5,7 +5,7 @@ from main.views import EmployeeDetailView, TimesheetCreateView, TimesheetDetailV
     RegisterEmployeeView, TeamCreateView, TeamListView, TeamJoinStaffView, TeamJoinManagerView, TeamViewMembersListView, \
     TeamLeaveStaffView, TeamLeaveManagerView, ManagerTeamViewMembersListView, SettingsListView, TeamDeleteView, \
     PenaltyCreateView, PenaltyTypeCreateView, PenaltyDeleteView, PenaltyTypeDeleteView, PayPeriodView, \
-    EmployeeUpdateView, PenaltyClaimView
+    EmployeeUpdateView, ClaimCreateView
 
 urlpatterns = [
     path('', EmployeeDetailView.as_view(), name='home'),
@@ -16,7 +16,7 @@ urlpatterns = [
     path('register', RegisterEmployeeView.as_view(), name='register-employee'),
     path('create', TimesheetCreateView.as_view(), name='timesheet-create'),
     path('timesheet-detail/<int:pk>', TimesheetDetailView.as_view(), name='timesheet-detail'),
-    path('penalty-claim', PenaltyClaimView.as_view(), name='penalty-claim'),
+    path('penalty-claim', ClaimCreateView.as_view(), name='penalty-claim'),
     path('penalty-create', PenaltyCreateView.as_view(), name='penalty-create'),
     path('penalty-delete/<int:pk>', PenaltyDeleteView.as_view(), name='penalty-delete'),
     path('penalty-type-create', PenaltyTypeCreateView.as_view(), name='penalty-type-create'),
