@@ -42,7 +42,7 @@ class TimeSheetModelForm(forms.ModelForm):
 class ClaimForm(forms.ModelForm):
     class Meta:
         model = Claim
-        fields = ['employee','penalty_type', 'claimed_seconds' ]
+        fields = ['employee', 'penalty_type', 'claimed_seconds']
         widgets = {
             'claimed_seconds': forms.TextInput(attrs={'type': 'number', 'placeholder': 'Duration'}),
             'employee': forms.HiddenInput(),
@@ -55,19 +55,20 @@ class ClaimForm(forms.ModelForm):
          field in self.fields.values()]
 
     def clean_claimed_seconds(self):
-        claimed_seconds = self.cleaned_data['claimed_seconds']
+        claimed_minutes = self.cleaned_data['claimed_seconds']
         employee = self.cleaned_data['employee']
         penalty_type = self.cleaned_data['penalty_type']
-        available_seconds = penalty_type.calculate_available_employee_time(employee)
-        if claimed_seconds > 1440:
+        available_minutes = penalty_type.calculate_available_employee_time(employee) * 60
+        if claimed_minutes > 1440:
             raise ValidationError('Duration over 24 hours. Max 1440 minutes allowed',
                                   code='invalid')
-        if claimed_seconds < 1:
+        if claimed_minutes < 1:
             raise ValidationError('Duration must be a positive number.',
                                   code='invalid')
-        if claimed_seconds > available_seconds:
-            raise ValidationError(f'Penalty type only has {abs(round(available_seconds/3600, 2))} hours available.')
-        return claimed_seconds
+        if claimed_minutes > available_minutes:
+            raise ValidationError(f'Penalty type only has {round(available_minutes / 60, 2)} hours available.')
+
+        return claimed_minutes
 
     def clean(self):
         for field in self.errors:
