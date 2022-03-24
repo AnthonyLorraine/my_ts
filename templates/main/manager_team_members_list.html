@@ -20,7 +20,7 @@
                 <tr>
                     <td><a href="{% url 'employee-detail' employee.slug %}">{{ employee.get_full_name }}</a></td>
                     {% for penalty_type in employee.duration_per_penalty %}
-                        <td>{{ penalty_type.available }}</td>
+                        <td>{{ penalty_type.available|floatformat:2 }}</td>
                     {% endfor %}
                 </tr>
             {% endfor %}
@@ -29,7 +29,7 @@
             <tr>
                 <td>Totals</td>
                 {% for penalty_type in team.duration_per_penalty %}
-                    <td>{{ penalty_type.1 }}</td>
+                    <td>{{ penalty_type.1|floatformat:2 }}</td>
                 {% endfor %}
             </tr>
             </tfoot>
