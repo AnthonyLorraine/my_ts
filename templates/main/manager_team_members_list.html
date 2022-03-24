@@ -9,11 +9,10 @@
             <thead>
             <tr>
                 <th>Employee</th>
-                {% for penalty_type in employee_list.0.duration_outstanding_per_penalty_type %}
-                    {% for key, value in penalty_type.items %}
-                        <th>{{ key|lower|capfirst }}</th>
-                    {% endfor %}
+                {% for penalty_type in user.duration_per_penalty %}
+                    <th>{{ penalty_type.penalty_type }}</th>
                 {% endfor %}
+
             </tr>
             </thead>
             <tbody>
@@ -21,7 +20,7 @@
                 <tr>
                     <td><a href="{% url 'employee-detail' employee.slug %}">{{ employee.get_full_name }}</a></td>
                     {% for penalty_type in employee.duration_per_penalty %}
-                        <td>{{ penalty_type.available|floatformat:2 }}</td>
+                        <td>{{ penalty_type.available }}</td>
                     {% endfor %}
                 </tr>
             {% endfor %}
@@ -29,10 +28,8 @@
             <tfoot>
             <tr>
                 <td>Totals</td>
-                {% for penalty_type in team.staff_penalty_hours %}
-                    {% for key, value in penalty_type.items %}
-                        <td>{{ value }}</td>
-                    {% endfor %}
+                {% for penalty_type in team.duration_per_penalty %}
+                    <td>{{ penalty_type.1 }}</td>
                 {% endfor %}
             </tr>
             </tfoot>

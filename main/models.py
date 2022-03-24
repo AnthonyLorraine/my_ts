@@ -78,10 +78,15 @@ class Employee(AbstractUser):
 
     @property
     def last_5_time_sheets(self):
-        pay_period = Settings.get_pay_period()
-        time_sheets = Timesheet.objects.filter(employee=self).filter(start_date_time__lte=pay_period).order_by(
+        # pay_period = Settings.get_pay_period()
+        time_sheets = Timesheet.objects.filter(employee=self).order_by(
             'start_date_time').reverse()[:5]
         return time_sheets
+
+    @property
+    def last_5_claims(self):
+        return Claim.objects.filter(employee=self).order_by('claim_date').reverse()[:5]
+
 
     @property
     def pay_period_time_sheets(self):
@@ -98,7 +103,17 @@ class Employee(AbstractUser):
         return time_sheets.count()
 
     @property
+    def total_claims_submitted(self):
+        claim = Claim.objects.filter(employee=self)
+        return claim.count()
+
+    @property
     def duration_per_penalty(self):
+        """
+        Gets available claimable time in hours for each penalty type.
+
+        :return: List[Dictionary{penalty:PenaltyType, available: Int}
+        """
         penalties = PenaltyType.objects.all()
         durations = []
         for penalty in penalties:
@@ -191,19 +206,20 @@ class Team(models.Model):
         return Employee.objects.filter(team=self).count()
 
     @property
-    def staff_penalty_hours(self):
-        time_sheets = Timesheet.objects.filter(employee__team=self)
-        penalty_types = PenaltyType.objects.all()
-        duration = []
-        for pt in penalty_types:
-            time = {}
-            timer = 0
-            for tsr in time_sheets:
-                if tsr.penalty_type.penalty_type.name == pt.name and not tsr.expired:
-                    timer += tsr.accrued_duration.total_seconds() / 3600
-            time[pt.name] = round(timer)
-            duration.append(time)
-        return duration
+    def duration_per_penalty(self) -> list:
+        """
+        Gets available claimable time in hours for each penalty type for the team.
+
+        :return: List[Dictionary{penalty:PenaltyType, available: Int}]
+        """
+        durations = {}
+        for employee in Employee.objects.filter(team=self):
+            for penalty in employee.duration_per_penalty:
+                try:
+                    durations[penalty['penalty_type'].name] += penalty['available']
+                except KeyError:
+                    durations[penalty['penalty_type'].name] = penalty['available']
+        return list(zip(list(durations), list(durations.values())))
 
 
 class Timesheet(models.Model):
@@ -292,7 +308,7 @@ class Timesheet(models.Model):
 
     @property
     def accrued_duration(self):
-        return timedelta(seconds=sum([row.payout_seconds for row in self.rows]))
+        return timedelta(seconds=sum([row.accrued_duration.total_seconds() for row in self.rows]))
 
     @property
     def end_date_time(self):
@@ -334,3 +350,7 @@ class Claim(models.Model):
             return True
         else:
             return False
+
+    @property
+    def duration(self):
+        return timedelta(seconds=self.claimed_seconds)

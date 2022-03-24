@@ -5,80 +5,87 @@
 {% block content %}
     <main class="container p-3">
         {% if not user == employee %}
-            <div class="d-flex flex-row justify-content-between align-items-center mt-3"><h3
+            <div class="d-flex flex-row justify-content-between align-items-center my-3 pb-3"><h3
                     class="m-0">{{ employee.get_full_name }}</h3>
                 <div><a class="btn btn-sm btn-success me-2" href="{% url 'employee-update' employee.slug %}">Edit</a><a
                         class="btn btn-sm btn-dark me-2" href="{% url 'manager-team-member-list' %}">Back</a></div>
             </div>
         {% endif %}
-        <div class="d-flex flex-row justify-content-around my-4 mt-3">
-            <div class="card m-2" style="width: 8rem;">
+        <div class="d-flex flex-row justify-content-center flex-wrap gap-3">
+            <div class="card" style="width: 8rem;">
                 <div class="card-body text-center">
                     <h3 class="card-title pb-2">{{ employee.total_time_sheets_submitted }}</h3>
-                    <h6 class="card-subtitle mb-1 text-muted">
+                    <h6 class="card-subtitle text-muted">
                         Sheet{% if employee.total_time_sheets_submitted > 1 %}s{% endif %}</h6>
                 </div>
             </div>
+            <div class="card" style="width: 8rem;">
+                <div class="card-body text-center">
+                    <h3 class="card-title pb-2">{{ employee.total_claims_submitted }}</h3>
+                    <h6 class="card-subtitle mb-1 text-muted">
+                        Claim{% if employee.total_claims_submitted > 1 %}s{% endif %}</h6>
+                </div>
+            </div>
             {% for duration in employee.duration_per_penalty %}
-                <div class="card m-2" style="width: 8rem;">
+                <div class="card" style="width: 8rem;">
                     <div class="card-body text-center">
-                    <h3>{{ duration.available|floatformat:2 }}</h3>
-                    <h6>{{ duration.penalty_type.name|lower|capfirst }} hrs</h6>
+                        <h3>{{ duration.available|floatformat:2 }}</h3>
+                        <h6 class="text-muted">{{ duration.penalty_type.name|lower|capfirst }} hrs</h6>
 
                     </div>
                 </div>
             {% endfor %}
         </div>
 
-        <div class="">
-            <h3 class="py-3">Pay Period <br/><small class="text-muted">{{ pay_period_start|date:'d/m/Y' }}
-                - {{ pay_period_end|date:'d/m/Y' }}</small></h3>
-            <div id="pay_period_items" class="accordion accordion-flush">
-                {% if not  employee.pay_period_time_sheets %}
-                    <small class="fst-italic">{% if employee == user %}You {% else %}They {% endif %}have no time sheets
-                        for this period</small>
-                {% endif %}
-                {% for time_sheet in employee.pay_period_time_sheets %}
+        {#        <div class="">#}
+        {#            <h3 class="py-3">Pay Period <br/><small class="text-muted">{{ pay_period_start|date:'d/m/Y' }}#}
+        {#                - {{ pay_period_end|date:'d/m/Y' }}</small></h3>#}
+        {#            <div id="pay_period_items" class="accordion accordion-flush">#}
+        {#                {% if not  employee.pay_period_time_sheets %}#}
+        {#                    <small class="fst-italic">{% if employee == user %}You {% else %}They {% endif %}have no time sheets#}
+        {#                        for this period</small>#}
+        {#                {% endif %}#}
+        {#                {% for time_sheet in employee.pay_period_time_sheets %}#}
+        {##}
+        {#                    <div class="accordion-item">#}
+        {#                        <h2 class="accordion-header" id="heading-pay-{{ time_sheet.pk }}">#}
+        {#                            <button class="accordion-button {% if forloop.counter != 1 %}collapsed{% endif %}"#}
+        {#                                    type="button" data-bs-toggle="collapse"#}
+        {#                                    data-bs-target="#collapse-pay-{{ time_sheet.pk }}" aria-expanded="false"#}
+        {#                                    aria-controls="collapse-pay-{{ time_sheet.pk }}">#}
+        {#                                {{ time_sheet.start_date_time|date:"d M Y" }}#}
+        {#                            </button>#}
+        {#                        </h2>#}
+        {#                        <div id="collapse-pay-{{ time_sheet.pk }}"#}
+        {#                             class="accordion-collapse collapse {% if forloop.counter == 1 %}show{% endif %}"#}
+        {#                             aria-labelledby="heading-pay-{{ time_sheet.pk }}" data-bs-parent="#pay_period_items">#}
+        {#                            <div class="accordion-body">#}
+        {#                                <div class="d-flex flex-column">#}
+        {#                                    <div class="d-flex flex-row justify-content-between">#}
+        {#                                        <div class="align-middle">Worked: {{ time_sheet.duration }}</div>#}
+        {#                                        <a href="{% url 'timesheet-detail' time_sheet.pk %}"#}
+        {#                                           class="btn btn-sm btn-outline-dark py-0">View</a>#}
+        {#                                    </div>#}
+        {#                                    <div>#}
+        {#                                        Accrued: {{ time_sheet.accrued_duration }}#}
+        {#                                    </div>#}
+        {#                                    <div>#}
+        {#                                        Type: {{ time_sheet.penalty.penalty_type.name|lower|capfirst }}#}
+        {#                                    </div>#}
+        {#                                </div>#}
+        {#                            </div>#}
+        {#                        </div>#}
+        {#                    </div>#}
+        {#                {% endfor %}#}
+        {#            </div>#}
+        {#        </div>#}
 
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="heading-pay-{{ time_sheet.pk }}">
-                            <button class="accordion-button {% if forloop.counter != 1 %}collapsed{% endif %}"
-                                    type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapse-pay-{{ time_sheet.pk }}" aria-expanded="false"
-                                    aria-controls="collapse-pay-{{ time_sheet.pk }}">
-                                {{ time_sheet.start_date_time|date:"d M Y" }}
-                            </button>
-                        </h2>
-                        <div id="collapse-pay-{{ time_sheet.pk }}"
-                             class="accordion-collapse collapse {% if forloop.counter == 1 %}show{% endif %}"
-                             aria-labelledby="heading-pay-{{ time_sheet.pk }}" data-bs-parent="#pay_period_items">
-                            <div class="accordion-body">
-                                <div class="d-flex flex-column">
-                                    <div class="d-flex flex-row justify-content-between">
-                                        <div class="align-middle">Worked: {{ time_sheet.duration }}</div>
-                                        <a href="{% url 'timesheet-detail' time_sheet.pk %}"
-                                           class="btn btn-sm btn-outline-dark py-0">View</a>
-                                    </div>
-                                    <div>
-                                        Accrued: {{ time_sheet.accrued_duration }}
-                                    </div>
-                                    <div>
-                                        Type: {{ time_sheet.penalty.penalty_type.name|lower|capfirst }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-
-        <div class="mt-2 pb-5">
-            <h3 class="py-3">Last 5 Time Sheets</h3>
-            <div id="recent_items" class="accordion accordion-flush pb-5">
+        <div class="mt-3">
+            <h3 class="py-3">Latest Time Sheets</h3>
+            <div id="recent_items" class="accordion accordion-flush">
                 {% if not  employee.last_5_time_sheets %}
                     <small class="fst-italic">{% if employee == user %}You {% else %}They {% endif %}haven't submitted
-                        any time sheets in a prior pay period</small>
+                        any time sheets.</small>
                 {% endif %}
                 {% for time_sheet in employee.last_5_time_sheets %}
                     <div class="accordion-item">
@@ -111,20 +118,55 @@
                 {% endfor %}
             </div>
         </div>
+        <div class="mt-3">
+            <h3 class="py-3">Latest Claims</h3>
+            <div id="recent_claims" class="accordion accordion-flush pb-5">
+                {% if not  employee.last_5_time_sheets %}
+                    <small class="fst-italic">{% if employee == user %}You {% else %}They {% endif %}haven't submitted
+                        any claims.</small>
+                {% endif %}
+                {% for claim in employee.last_5_claims %}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading-{{ claim.pk }}">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapse-{{ claim.pk }}" aria-expanded="false"
+                                    aria-controls="collapse-{{ claim.pk }}">
+                                {{ claim.claim_date|date:"d M Y" }}
+                            </button>
+                        </h2>
+                        <div id="collapse-{{ claim.pk }}" class="accordion-collapse collapse"
+                             aria-labelledby="heading-{{ claim.pk }}" data-bs-parent="#recent_claims">
+                            <div class="accordion-body">
+                                <div class="d-flex flex-column">
+                                    <div class="d-flex flex-row justify-content-between">
+                                        <div class="align-middle">Claimed: {{ claim.duration }}</div>
+                                        {#                                        <a href="{% url 'timesheet-detail' claim.pk %}"#}
+                                        {#                                           class="btn btn-sm btn-outline-dark py-0">View</a>#}
+                                    </div>
+                                    <div>
+                                        Type: {{ claim.penalty_type.name|lower|capfirst }}
+                                    </div>
 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
     </main>
     {% if user == employee and user.team %}
         <div class="position-fixed bottom-0 end-0 me-4 mb-4 d-flex flex-row align-content-between">
-        <a class="border p-3 bg-dark"
-           style="border-radius: 20px; z-index: 3;"
-           href="{% url 'timesheet-create' %}">
-            <span class="material-icons text-center align-middle text-white">add</span>
-        </a>
-        <a class="border p-3 bg-success mx-3"
-           style="border-radius: 20px; z-index: 3;"
-           href="{% url 'penalty-claim' %}">
-            <span class="material-icons text-center align-middle text-white">paid</span>
-        </a>
+            <a class="border p-3 bg-dark"
+               style="border-radius: 20px; z-index: 3;"
+               href="{% url 'timesheet-create' %}">
+                <span class="material-icons text-center align-middle text-white">add</span>
+            </a>
+            <a class="border p-3 bg-success mx-3"
+               style="border-radius: 20px; z-index: 3;"
+               href="{% url 'penalty-claim' %}">
+                <span class="material-icons text-center align-middle text-white">paid</span>
+            </a>
         </div>
 
     {% endif %}
