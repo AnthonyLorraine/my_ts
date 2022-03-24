@@ -127,15 +127,15 @@
                 {% endif %}
                 {% for claim in employee.last_5_claims %}
                     <div class="accordion-item">
-                        <h2 class="accordion-header" id="heading-{{ claim.pk }}">
+                        <h2 class="accordion-header" id="heading-claim-{{ claim.pk }}">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#collapse-{{ claim.pk }}" aria-expanded="false"
-                                    aria-controls="collapse-{{ claim.pk }}">
+                                    data-bs-target="#collapse-claim-{{ claim.pk }}" aria-expanded="false"
+                                    aria-controls="collapse-claim-{{ claim.pk }}">
                                 {{ claim.claim_date|date:"d M Y" }}
                             </button>
                         </h2>
-                        <div id="collapse-{{ claim.pk }}" class="accordion-collapse collapse"
-                             aria-labelledby="heading-{{ claim.pk }}" data-bs-parent="#recent_claims">
+                        <div id="collapse-claim-{{ claim.pk }}" class="accordion-collapse collapse"
+                             aria-labelledby="heading-claim-{{ claim.pk }}" data-bs-parent="#recent_claims">
                             <div class="accordion-body">
                                 <div class="d-flex flex-column">
                                     <div class="d-flex flex-row justify-content-between">

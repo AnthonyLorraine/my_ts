@@ -207,6 +207,7 @@ class Team(models.Model):
 
     @property
     def duration_per_penalty(self) -> list:
+        # todo Needs to match the Employee duration_per_penalty, to make rendering the same on the templates.
         """
         Gets available claimable time in hours for each penalty type for the team.
 
