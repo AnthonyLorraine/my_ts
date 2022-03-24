@@ -57,7 +57,11 @@ class ClaimForm(forms.ModelForm):
     def clean_claimed_seconds(self):
         claimed_minutes = self.cleaned_data['claimed_seconds']
         employee = self.cleaned_data['employee']
-        penalty_type = self.cleaned_data['penalty_type']
+        try:
+            penalty_type = self.cleaned_data['penalty_type']
+        except KeyError:
+            raise ValidationError('Penalty type is required.',
+                                  code='invalid')
         available_minutes = penalty_type.calculate_available_employee_time(employee) * 60
         if claimed_minutes > 1440:
             raise ValidationError('Duration over 24 hours. Max 1440 minutes allowed',
