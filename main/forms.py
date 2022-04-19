@@ -1,35 +1,17 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from main.models import Timesheet, Penalty, PenaltyType, Employee, Claim
+from django.contrib.auth.forms import AuthenticationForm
+from main.models import Timesheet, Penalty, PenaltyType, Employee, Claim, Team
 
 
-class TimeSheetModelForm(forms.ModelForm):
-    class Meta:
-        model = Timesheet
-        fields = ['start_date_time', '_duration', 'penalty']
-        widgets = {
-            'start_date_time': forms.DateTimeInput(
-                attrs={'type': 'datetime-local', 'max': '2100-01-01T00:00', 'min': '2020-01-01T00:00',
-                       'placeholder': 'Start Date Time'}),
-            'duration': forms.TextInput(attrs={'type': 'number', 'placeholder': 'Duration'}),
-        }
-
+class FloatingValidationModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        [field.widget.attrs.update(
-            {'class': 'form-control', 'aria-describedby': f'{str(field.label).replace(" ", "").lower()}Feedback'}) for
-         field in self.fields.values()]
-
-    def clean_duration(self):
-        data = self.cleaned_data['_duration']
-        if data > 1440:
-            raise ValidationError('Duration over 24 hours. Max 1440 minutes allowed',
-                                  code='invalid')
-        if data < 1:
-            raise ValidationError('Duration must be a positive number.',
-                                  code='invalid')
-
-        return data
+        [field.widget.attrs.update({
+            'class': 'form-control',
+            'aria-describedby': f'{str(field.label).replace(" ", "").lower()}Feedback',
+            'placeholder': f'{str(field.label).capitalize()}'
+        }) for field in self.fields.values()]
 
     def clean(self):
         for field in self.errors:
@@ -39,7 +21,36 @@ class TimeSheetModelForm(forms.ModelForm):
         return super().clean()
 
 
-class ClaimForm(forms.ModelForm):
+class TimeSheetModelForm(FloatingValidationModelForm):
+    class Meta:
+        model = Timesheet
+        fields = ['start_date_time', '_duration', 'penalty']
+        widgets = {
+            'start_date_time': forms.DateTimeInput(
+                attrs={'type': 'datetime-local',
+                       'max': '2100-01-01T00:00',
+                       'min': '2020-01-01T00:00',
+                       'placeholder': 'Start Date Time'}),
+            '_duration': forms.TextInput(
+                attrs={'type': 'number',
+                       'placeholder': 'Duration'}),
+        }
+
+    def clean__duration(self):
+        data = self.cleaned_data['_duration']
+        if data > 1440:
+            raise ValidationError('Duration over 24 hours. Max 1440 minutes allowed',
+                                  code='invalid')
+        if data < 1:
+            raise ValidationError('Duration must be a positive number.',
+                                  code='invalid')
+        if data == 0:
+            raise ValidationError('Duration must not be zero.',
+                                  code='invalid')
+        return data
+
+
+class ClaimForm(FloatingValidationModelForm):
     class Meta:
         model = Claim
         fields = ['employee', 'penalty_type', 'claimed_seconds']
@@ -47,12 +58,6 @@ class ClaimForm(forms.ModelForm):
             'claimed_seconds': forms.TextInput(attrs={'type': 'number', 'placeholder': 'Duration'}),
             'employee': forms.HiddenInput(),
         }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        [field.widget.attrs.update(
-            {'class': 'form-control', 'aria-describedby': f'{str(field.label).replace(" ", "").lower()}Feedback'}) for
-         field in self.fields.values()]
 
     def clean_claimed_seconds(self):
         claimed_minutes = self.cleaned_data['claimed_seconds']
@@ -71,8 +76,44 @@ class ClaimForm(forms.ModelForm):
                                   code='invalid')
         if claimed_minutes > available_minutes:
             raise ValidationError(f'Penalty type only has {round(available_minutes / 60, 2)} hours available.')
-
         return claimed_minutes
+
+
+class PenaltyCreateModelForm(FloatingValidationModelForm):
+    class Meta:
+        model = Penalty
+        fields = '__all__'
+        widgets = {
+            'name': forms.TextInput(attrs={'required': True, 'maxlength': 40}),
+        }
+
+
+class PenaltyTypeCreateModelForm(FloatingValidationModelForm):
+    class Meta:
+        model = PenaltyType
+        fields = '__all__'
+        widgets = {
+            'name': forms.TextInput(attrs={'required': True, 'maxlength': 40}),
+        }
+
+
+class EmployeeUpdateModelForm(FloatingValidationModelForm):
+    class Meta:
+        model = Employee
+        fields = ['first_name', 'last_name', 'email', 'username']
+        widgets = {
+            'username': forms.TextInput(attrs={'required': True, 'maxlength': 40}),
+        }
+
+
+class LogInModelForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        [field.widget.attrs.update({
+            'class': 'form-control',
+            'aria-describedby': f'{str(field.label).replace(" ", "").lower()}Feedback',
+            'placeholder': f'{str(field.label).capitalize()}'
+        }) for field in self.fields.values()]
 
     def clean(self):
         for field in self.errors:
@@ -82,40 +123,20 @@ class ClaimForm(forms.ModelForm):
         return super().clean()
 
 
-class PenaltyCreateModelForm(forms.ModelForm):
-    class Meta:
-        model = Penalty
-        fields = '__all__'
-        widgets = {
-            'name': forms.TextInput(attrs={'required': True, 'maxlength': 40}),
-        }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        [field.widget.attrs.update({'class': 'form-control form-control-sm'}) for field in self.fields.values()]
-
-
-class PenaltyTypeCreateModelForm(forms.ModelForm):
-    class Meta:
-        model = PenaltyType
-        fields = '__all__'
-        widgets = {
-            'name': forms.TextInput(attrs={'required': True, 'maxlength': 40}),
-        }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        [field.widget.attrs.update({'class': 'form-control form-control-sm'}) for field in self.fields.values()]
-
-
-class EmployeeUpdateModelForm(forms.ModelForm):
+class RegisterModelForm(FloatingValidationModelForm):
     class Meta:
         model = Employee
-        fields = ['first_name', 'last_name', 'email', 'username']
+        fields = ['username', 'first_name', 'last_name', 'password']
         widgets = {
             'username': forms.TextInput(attrs={'required': True, 'maxlength': 40}),
+            'password': forms.PasswordInput(attrs={'required': True})
         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        [field.widget.attrs.update({'class': 'form-control form-control-sm'}) for field in self.fields.values()]
+
+class TeamCreateModelForm(FloatingValidationModelForm):
+    class Meta:
+        model = Team
+        fields = ['name', ]
+        widgets = {
+            'name': forms.TextInput(attrs={'required': True, 'maxlength': 40}),
+        }

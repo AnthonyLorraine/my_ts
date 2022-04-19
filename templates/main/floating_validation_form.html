@@ -1,0 +1,30 @@
+<form method="post" class="mt-4" novalidate>{% csrf_token %}
+    {% if form.errors %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Holy guacamole!</strong> {{ form.non_field_errors }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+    {% for field in form.hidden_fields %}
+        {{ field }}
+    {% endfor %}
+    {% for field in form.visible_fields %}
+        <div class="form-floating mb-3">
+            {{ field }}
+            <label for="id_{{ field.name }}">{{ field.label }}</label>
+            <div id="{{ field.label|cut:" "|lower }}Feedback" class="invalid-feedback fst-italic px-1 m-0">
+                {{ field.errors.as_text|cut:"*" }}
+            </div>
+        </div>
+    {% endfor %}
+    <div class="d-flex flex-row justify-content-end">
+        {% if back_referer %}
+        <a class="btn p-3 px-3 mt-3 me-5" href="{{ request.META.HTTP_REFERER }}">Back</a>
+        {% elif back_home %}
+        <a class="btn p-3 px-3 mt-3 me-5" href="{% url 'home' %}">Back</a>
+        {% elif back_custom %}
+        <a class="btn p-3 px-3 mt-3 me-5" href="{{ back_custom }}">Back</a>
+        {% endif %}
+        <button type="submit" class="btn btn-dark p-3 px-5 mt-3">{{ button_name }}</button>
+    </div>
+</form>

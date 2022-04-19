@@ -1,0 +1,1405 @@
+[
+  {
+    "model": "auth.permission",
+    "pk": 1,
+    "fields": {
+      "name": "Can add log entry",
+      "content_type": 1,
+      "codename": "add_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 2,
+    "fields": {
+      "name": "Can change log entry",
+      "content_type": 1,
+      "codename": "change_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 3,
+    "fields": {
+      "name": "Can delete log entry",
+      "content_type": 1,
+      "codename": "delete_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 4,
+    "fields": {
+      "name": "Can view log entry",
+      "content_type": 1,
+      "codename": "view_logentry"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 5,
+    "fields": {
+      "name": "Can add permission",
+      "content_type": 2,
+      "codename": "add_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 6,
+    "fields": {
+      "name": "Can change permission",
+      "content_type": 2,
+      "codename": "change_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 7,
+    "fields": {
+      "name": "Can delete permission",
+      "content_type": 2,
+      "codename": "delete_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 8,
+    "fields": {
+      "name": "Can view permission",
+      "content_type": 2,
+      "codename": "view_permission"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 9,
+    "fields": {
+      "name": "Can add group",
+      "content_type": 3,
+      "codename": "add_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 10,
+    "fields": {
+      "name": "Can change group",
+      "content_type": 3,
+      "codename": "change_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 11,
+    "fields": {
+      "name": "Can delete group",
+      "content_type": 3,
+      "codename": "delete_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 12,
+    "fields": {
+      "name": "Can view group",
+      "content_type": 3,
+      "codename": "view_group"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 13,
+    "fields": {
+      "name": "Can add content type",
+      "content_type": 4,
+      "codename": "add_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 14,
+    "fields": {
+      "name": "Can change content type",
+      "content_type": 4,
+      "codename": "change_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 15,
+    "fields": {
+      "name": "Can delete content type",
+      "content_type": 4,
+      "codename": "delete_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 16,
+    "fields": {
+      "name": "Can view content type",
+      "content_type": 4,
+      "codename": "view_contenttype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 17,
+    "fields": {
+      "name": "Can add session",
+      "content_type": 5,
+      "codename": "add_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 18,
+    "fields": {
+      "name": "Can change session",
+      "content_type": 5,
+      "codename": "change_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 19,
+    "fields": {
+      "name": "Can delete session",
+      "content_type": 5,
+      "codename": "delete_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 20,
+    "fields": {
+      "name": "Can view session",
+      "content_type": 5,
+      "codename": "view_session"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 21,
+    "fields": {
+      "name": "Can add user",
+      "content_type": 6,
+      "codename": "add_employee"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 22,
+    "fields": {
+      "name": "Can change user",
+      "content_type": 6,
+      "codename": "change_employee"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 23,
+    "fields": {
+      "name": "Can delete user",
+      "content_type": 6,
+      "codename": "delete_employee"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 24,
+    "fields": {
+      "name": "Can view user",
+      "content_type": 6,
+      "codename": "view_employee"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 25,
+    "fields": {
+      "name": "Can add penalty",
+      "content_type": 7,
+      "codename": "add_penalty"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 26,
+    "fields": {
+      "name": "Can change penalty",
+      "content_type": 7,
+      "codename": "change_penalty"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 27,
+    "fields": {
+      "name": "Can delete penalty",
+      "content_type": 7,
+      "codename": "delete_penalty"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 28,
+    "fields": {
+      "name": "Can view penalty",
+      "content_type": 7,
+      "codename": "view_penalty"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 29,
+    "fields": {
+      "name": "Can add penalty type",
+      "content_type": 8,
+      "codename": "add_penaltytype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 30,
+    "fields": {
+      "name": "Can change penalty type",
+      "content_type": 8,
+      "codename": "change_penaltytype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 31,
+    "fields": {
+      "name": "Can delete penalty type",
+      "content_type": 8,
+      "codename": "delete_penaltytype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 32,
+    "fields": {
+      "name": "Can view penalty type",
+      "content_type": 8,
+      "codename": "view_penaltytype"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 33,
+    "fields": {
+      "name": "Can add timesheet",
+      "content_type": 9,
+      "codename": "add_timesheet"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 34,
+    "fields": {
+      "name": "Can change timesheet",
+      "content_type": 9,
+      "codename": "change_timesheet"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 35,
+    "fields": {
+      "name": "Can delete timesheet",
+      "content_type": 9,
+      "codename": "delete_timesheet"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 36,
+    "fields": {
+      "name": "Can view timesheet",
+      "content_type": 9,
+      "codename": "view_timesheet"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 37,
+    "fields": {
+      "name": "Can add timesheet row",
+      "content_type": 10,
+      "codename": "add_timesheetrow"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 38,
+    "fields": {
+      "name": "Can change timesheet row",
+      "content_type": 10,
+      "codename": "change_timesheetrow"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 39,
+    "fields": {
+      "name": "Can delete timesheet row",
+      "content_type": 10,
+      "codename": "delete_timesheetrow"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 40,
+    "fields": {
+      "name": "Can view timesheet row",
+      "content_type": 10,
+      "codename": "view_timesheetrow"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 41,
+    "fields": {
+      "name": "Can add team",
+      "content_type": 11,
+      "codename": "add_team"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 42,
+    "fields": {
+      "name": "Can change team",
+      "content_type": 11,
+      "codename": "change_team"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 43,
+    "fields": {
+      "name": "Can delete team",
+      "content_type": 11,
+      "codename": "delete_team"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 44,
+    "fields": {
+      "name": "Can view team",
+      "content_type": 11,
+      "codename": "view_team"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 45,
+    "fields": {
+      "name": "Can add settings",
+      "content_type": 12,
+      "codename": "add_settings"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 46,
+    "fields": {
+      "name": "Can change settings",
+      "content_type": 12,
+      "codename": "change_settings"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 47,
+    "fields": {
+      "name": "Can delete settings",
+      "content_type": 12,
+      "codename": "delete_settings"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 48,
+    "fields": {
+      "name": "Can view settings",
+      "content_type": 12,
+      "codename": "view_settings"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 49,
+    "fields": {
+      "name": "Can add claim",
+      "content_type": 13,
+      "codename": "add_claim"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 50,
+    "fields": {
+      "name": "Can change claim",
+      "content_type": 13,
+      "codename": "change_claim"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 51,
+    "fields": {
+      "name": "Can delete claim",
+      "content_type": 13,
+      "codename": "delete_claim"
+    }
+  },
+  {
+    "model": "auth.permission",
+    "pk": 52,
+    "fields": {
+      "name": "Can view claim",
+      "content_type": 13,
+      "codename": "view_claim"
+    }
+  },
+  {
+    "model": "auth.group",
+    "pk": 1,
+    "fields": {
+      "name": "Manager",
+      "permissions": []
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 1,
+    "fields": {
+      "app_label": "admin",
+      "model": "logentry"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 2,
+    "fields": {
+      "app_label": "auth",
+      "model": "permission"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 3,
+    "fields": {
+      "app_label": "auth",
+      "model": "group"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 4,
+    "fields": {
+      "app_label": "contenttypes",
+      "model": "contenttype"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 5,
+    "fields": {
+      "app_label": "sessions",
+      "model": "session"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 6,
+    "fields": {
+      "app_label": "main",
+      "model": "employee"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 7,
+    "fields": {
+      "app_label": "main",
+      "model": "penalty"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 8,
+    "fields": {
+      "app_label": "main",
+      "model": "penaltytype"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 9,
+    "fields": {
+      "app_label": "main",
+      "model": "timesheet"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 10,
+    "fields": {
+      "app_label": "main",
+      "model": "timesheetrow"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 11,
+    "fields": {
+      "app_label": "main",
+      "model": "team"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 12,
+    "fields": {
+      "app_label": "main",
+      "model": "settings"
+    }
+  },
+  {
+    "model": "contenttypes.contenttype",
+    "pk": 13,
+    "fields": {
+      "app_label": "main",
+      "model": "claim"
+    }
+  },
+  {
+    "model": "sessions.session",
+    "pk": "2snfu4i7a5hww5kp0ug6l7ihd9vtp87x",
+    "fields": {
+      "session_data": ".eJxVjDsOwyAQBe9CHSEwLJ-U6X0GtMASnERYMnYV5e6xJRdJ-2bmvVnAba1h67SEKbMrk4pdfseI6UntIPmB7T7zNLd1mSI_FH7Szsc50-t2un8HFXvdaw0CJJVUNKnsyWWnU4HiwUs0wiAINFp7NViIxQoqg1MGCXE3wDrNPl8I0jfF:1nfy3O:Dg4UeacIwUm2vozFpcrSVczv9A_x5n3OKhNGa8Nq4zg",
+      "expire_date": "2022-05-01T06:06:34.410"
+    }
+  },
+  {
+    "model": "main.settings",
+    "pk": 1,
+    "fields": {
+      "name": "pay_period",
+      "value": "02032022"
+    }
+  },
+  {
+    "model": "main.penaltytype",
+    "pk": 1,
+    "fields": {
+      "name": "Paid"
+    }
+  },
+  {
+    "model": "main.penaltytype",
+    "pk": 2,
+    "fields": {
+      "name": "Toil"
+    }
+  },
+  {
+    "model": "main.penalty",
+    "pk": 1,
+    "fields": {
+      "name": "On Call",
+      "penalty_type": 1,
+      "valid_for_day_count": 14
+    }
+  },
+  {
+    "model": "main.penalty",
+    "pk": 2,
+    "fields": {
+      "name": "Call Out",
+      "penalty_type": 1,
+      "valid_for_day_count": 14
+    }
+  },
+  {
+    "model": "main.penalty",
+    "pk": 4,
+    "fields": {
+      "name": "Change Request",
+      "penalty_type": 2,
+      "valid_for_day_count": 14
+    }
+  },
+  {
+    "model": "main.employee",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$GfAmOlUZYIYPYcBCOzgcUf$Byo2OTigWUZFjrVBchE78UZ9vigq/Pghq+aHQXCINCI=",
+      "last_login": "2022-04-17T06:00:59.955",
+      "is_superuser": true,
+      "username": "ant",
+      "first_name": "Administrator",
+      "last_name": "",
+      "email": "",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2022-04-17T05:39:37.123",
+      "team": null,
+      "slug": "bound-method-abstractuserget_full_name-of-employee",
+      "tutorial_done": false,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "main.employee",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$Oh0tZlfuWt7rN5JEiRz8nn$vQZEdUTJD1q4aD4+9qjs10oES5b4rYjIYHly2e1GQ5o=",
+      "last_login": "2022-04-17T05:50:26.927",
+      "is_superuser": false,
+      "username": "fred",
+      "first_name": "Fred",
+      "last_name": "Kruger",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-04-17T05:42:36",
+      "team": 2,
+      "slug": "fred-kruger",
+      "tutorial_done": false,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "main.employee",
+    "pk": 3,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$aURd2ceiod2glf178QeGSB$w8VJeqRv/dB2g1x1SopJrw4x3M/JJKAtnDWQQQ/rZJY=",
+      "last_login": "2022-04-17T05:51:21.041",
+      "is_superuser": false,
+      "username": "harrison",
+      "first_name": "Harrison",
+      "last_name": "Ford",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-04-17T05:43:09",
+      "team": 2,
+      "slug": "harrison-ford",
+      "tutorial_done": false,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "main.employee",
+    "pk": 4,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$IlkWX4H9m5PTxwAZYDJv9F$UafTF50yUUyn8XbizzW3u5Oww+wU/m5Uc7jUNZcK7PU=",
+      "last_login": "2022-04-17T05:46:16.448",
+      "is_superuser": false,
+      "username": "jack",
+      "first_name": "Jack",
+      "last_name": "Beans",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-04-17T05:46:16",
+      "team": 2,
+      "slug": "jack-beans",
+      "tutorial_done": false,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "main.employee",
+    "pk": 5,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$e7TCeIzeXny0NRiTJWG0td$mhECQgylUD8afzpIKyndPPOuamXPVKjRT4aH+I5Impg=",
+      "last_login": "2022-04-17T05:47:53.434",
+      "is_superuser": false,
+      "username": "jill",
+      "first_name": "Jill",
+      "last_name": "Beans",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-04-17T05:47:53",
+      "team": 2,
+      "slug": "jill-beans",
+      "tutorial_done": false,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "main.employee",
+    "pk": 6,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$mzmXj0qP6ae3ekTkHHshVz$i3G2596PmzObR7y15pisqevELUdO24vrM4cEvEPKmTQ=",
+      "last_login": "2022-04-17T05:49:54.697",
+      "is_superuser": false,
+      "username": "gordon",
+      "first_name": "Gordon",
+      "last_name": "Bombay",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-04-17T05:49:54",
+      "team": 2,
+      "slug": "gordon-bombay",
+      "tutorial_done": false,
+      "groups": [
+        1
+      ],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "main.employee",
+    "pk": 7,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$F9bQdFOb6lB3pPpZQUSzOl$wOiV4e5WVEI+B3R19artEyVC9kNWUDlYCUxJYFq4vOE=",
+      "last_login": "2022-04-17T05:54:11.997",
+      "is_superuser": false,
+      "username": "john",
+      "first_name": "John",
+      "last_name": "Smith",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-04-17T05:54:11",
+      "team": 1,
+      "slug": "john-smith",
+      "tutorial_done": false,
+      "groups": [
+        1
+      ],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "main.employee",
+    "pk": 8,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$a4gwv7qrjbcQJ1kEgAWp2v$k6EKkx+4uRkBpdS2s9hl1dYk3qdDgwG9KpDZI0xunGA=",
+      "last_login": "2022-04-17T05:55:37.681",
+      "is_superuser": false,
+      "username": "templeton",
+      "first_name": "Templeton",
+      "last_name": "Peck",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-04-17T05:55:37",
+      "team": 1,
+      "slug": "templeton-peck",
+      "tutorial_done": false,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "main.employee",
+    "pk": 9,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$zS4jceJb1CpPCCzUCn5fm1$XWtyx8GO49p9fFsjUGDNzwLebBjLR10zpDxyvL0sGXE=",
+      "last_login": "2022-04-17T05:58:45.267",
+      "is_superuser": false,
+      "username": "howlingmad",
+      "first_name": "Howling Mad",
+      "last_name": "Murdock",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-04-17T05:58:45",
+      "team": 1,
+      "slug": "howling-mad-murdock",
+      "tutorial_done": false,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "main.employee",
+    "pk": 10,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$REx1A4Dkt3ehrDFdZvpSP7$uZkjO/rnOsdsdh6ZUdrpZM0YnbLhCaU6ZrCHdurQezY=",
+      "last_login": "2022-04-17T06:00:09.549",
+      "is_superuser": false,
+      "username": "bosco",
+      "first_name": "Bosco",
+      "last_name": "Baracus",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-04-17T06:00:09",
+      "team": 1,
+      "slug": "bosco-baracus",
+      "tutorial_done": false,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "main.employee",
+    "pk": 11,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$dlI7UVMZw9unKPx4zh9u80$j9zQ+Ek2q6s+HyTmzw3zSapPUbeG3r0jC4qlL0NWec0=",
+      "last_login": "2022-04-17T06:04:27.996",
+      "is_superuser": false,
+      "username": "salmon",
+      "first_name": "Pink",
+      "last_name": "Salmon",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-04-17T06:04:27",
+      "team": 3,
+      "slug": "pink-salmon",
+      "tutorial_done": false,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "main.employee",
+    "pk": 12,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$nTW6ElXIctclL7Mzih5NUb$tf4o7mLYQQQeufSxBLACqihZDo37hy/Vz36bEEXjGUQ=",
+      "last_login": "2022-04-17T06:05:30.010",
+      "is_superuser": false,
+      "username": "blow",
+      "first_name": "Blow",
+      "last_name": "Fish",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-04-17T06:05:29",
+      "team": 3,
+      "slug": "blow-fish",
+      "tutorial_done": false,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "main.employee",
+    "pk": 13,
+    "fields": {
+      "password": "pbkdf2_sha256$320000$wIybd90X0rb6lK0CoUKDjT$u+oyww781YpJ8pk7Gs6UnlOX9eUQN2rpDzlvkun/T7w=",
+      "last_login": "2022-04-17T06:06:34.410",
+      "is_superuser": false,
+      "username": "swordfish",
+      "first_name": "Sword",
+      "last_name": "Fish",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-04-17T06:06:34",
+      "team": 3,
+      "slug": "sword-fish",
+      "tutorial_done": false,
+      "groups": [
+        1
+      ],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "main.team",
+    "pk": 1,
+    "fields": {
+      "name": "A Team",
+      "manager": 7,
+      "slug": "a-team"
+    }
+  },
+  {
+    "model": "main.team",
+    "pk": 2,
+    "fields": {
+      "name": "Mighty Ducks",
+      "manager": 6,
+      "slug": "mighty-ducks"
+    }
+  },
+  {
+    "model": "main.team",
+    "pk": 3,
+    "fields": {
+      "name": "Fish",
+      "manager": 13,
+      "slug": "fish"
+    }
+  },
+  {
+    "model": "main.timesheet",
+    "pk": 1,
+    "fields": {
+      "employee": 4,
+      "start_date_time": "2022-04-03T13:47:00",
+      "_duration": 3600,
+      "penalty": 4
+    }
+  },
+  {
+    "model": "main.timesheet",
+    "pk": 2,
+    "fields": {
+      "employee": 4,
+      "start_date_time": "2022-04-05T13:47:00",
+      "_duration": 7200,
+      "penalty": 2
+    }
+  },
+  {
+    "model": "main.timesheet",
+    "pk": 3,
+    "fields": {
+      "employee": 5,
+      "start_date_time": "2022-04-10T13:48:00",
+      "_duration": 5400,
+      "penalty": 1
+    }
+  },
+  {
+    "model": "main.timesheet",
+    "pk": 4,
+    "fields": {
+      "employee": 5,
+      "start_date_time": "2022-04-11T13:48:00",
+      "_duration": 7200,
+      "penalty": 1
+    }
+  },
+  {
+    "model": "main.timesheet",
+    "pk": 5,
+    "fields": {
+      "employee": 5,
+      "start_date_time": "2022-04-12T13:49:00",
+      "_duration": 1800,
+      "penalty": 4
+    }
+  },
+  {
+    "model": "main.timesheet",
+    "pk": 6,
+    "fields": {
+      "employee": 2,
+      "start_date_time": "2022-04-10T13:50:00",
+      "_duration": 7200,
+      "penalty": 4
+    }
+  },
+  {
+    "model": "main.timesheet",
+    "pk": 7,
+    "fields": {
+      "employee": 2,
+      "start_date_time": "2022-04-11T13:50:00",
+      "_duration": 1500,
+      "penalty": 4
+    }
+  },
+  {
+    "model": "main.timesheet",
+    "pk": 8,
+    "fields": {
+      "employee": 2,
+      "start_date_time": "2022-04-13T13:51:00",
+      "_duration": 5400,
+      "penalty": 2
+    }
+  },
+  {
+    "model": "main.timesheet",
+    "pk": 9,
+    "fields": {
+      "employee": 3,
+      "start_date_time": "2022-04-10T13:51:00",
+      "_duration": 5400,
+      "penalty": 2
+    }
+  },
+  {
+    "model": "main.timesheet",
+    "pk": 10,
+    "fields": {
+      "employee": 3,
+      "start_date_time": "2022-04-11T13:51:00",
+      "_duration": 2100,
+      "penalty": 4
+    }
+  },
+  {
+    "model": "main.timesheet",
+    "pk": 11,
+    "fields": {
+      "employee": 7,
+      "start_date_time": "2022-04-10T13:54:00",
+      "_duration": 5400,
+      "penalty": 1
+    }
+  },
+  {
+    "model": "main.timesheet",
+    "pk": 12,
+    "fields": {
+      "employee": 7,
+      "start_date_time": "2022-04-11T13:54:00",
+      "_duration": 7200,
+      "penalty": 4
+    }
+  },
+  {
+    "model": "main.timesheet",
+    "pk": 13,
+    "fields": {
+      "employee": 8,
+      "start_date_time": "2022-04-11T13:56:00",
+      "_duration": 10800,
+      "penalty": 1
+    }
+  },
+  {
+    "model": "main.timesheet",
+    "pk": 14,
+    "fields": {
+      "employee": 8,
+      "start_date_time": "2022-04-12T13:56:00",
+      "_duration": 3600,
+      "penalty": 4
+    }
+  },
+  {
+    "model": "main.timesheet",
+    "pk": 15,
+    "fields": {
+      "employee": 9,
+      "start_date_time": "2022-04-18T13:58:00",
+      "_duration": 3900,
+      "penalty": 2
+    }
+  },
+  {
+    "model": "main.timesheet",
+    "pk": 16,
+    "fields": {
+      "employee": 9,
+      "start_date_time": "2022-04-12T13:59:00",
+      "_duration": 18000,
+      "penalty": 4
+    }
+  },
+  {
+    "model": "main.timesheet",
+    "pk": 17,
+    "fields": {
+      "employee": 10,
+      "start_date_time": "2022-04-13T14:00:00",
+      "_duration": 5400,
+      "penalty": 4
+    }
+  },
+  {
+    "model": "main.timesheet",
+    "pk": 18,
+    "fields": {
+      "employee": 10,
+      "start_date_time": "2022-04-15T14:00:00",
+      "_duration": 7200,
+      "penalty": 1
+    }
+  },
+  {
+    "model": "main.timesheet",
+    "pk": 19,
+    "fields": {
+      "employee": 11,
+      "start_date_time": "2022-04-13T14:04:00",
+      "_duration": 1500,
+      "penalty": 2
+    }
+  },
+  {
+    "model": "main.timesheet",
+    "pk": 20,
+    "fields": {
+      "employee": 12,
+      "start_date_time": "2022-04-14T14:05:00",
+      "_duration": 5400,
+      "penalty": 1
+    }
+  },
+  {
+    "model": "main.timesheet",
+    "pk": 21,
+    "fields": {
+      "employee": 12,
+      "start_date_time": "2022-04-13T14:06:00",
+      "_duration": 7200,
+      "penalty": 4
+    }
+  },
+  {
+    "model": "main.timesheet",
+    "pk": 22,
+    "fields": {
+      "employee": 13,
+      "start_date_time": "2022-04-10T14:06:00",
+      "_duration": 5400,
+      "penalty": 1
+    }
+  },
+  {
+    "model": "main.timesheet",
+    "pk": 23,
+    "fields": {
+      "employee": 13,
+      "start_date_time": "2022-04-18T14:07:00",
+      "_duration": 5400,
+      "penalty": 4
+    }
+  },
+  {
+    "model": "main.timesheetrow",
+    "pk": 1,
+    "fields": {
+      "date_worked": "2022-04-03",
+      "worked_seconds": 3600,
+      "payout_seconds": 7200,
+      "timesheet": 1
+    }
+  },
+  {
+    "model": "main.timesheetrow",
+    "pk": 2,
+    "fields": {
+      "date_worked": "2022-04-05",
+      "worked_seconds": 7200,
+      "payout_seconds": 10800,
+      "timesheet": 2
+    }
+  },
+  {
+    "model": "main.timesheetrow",
+    "pk": 3,
+    "fields": {
+      "date_worked": "2022-04-10",
+      "worked_seconds": 5400,
+      "payout_seconds": 10800,
+      "timesheet": 3
+    }
+  },
+  {
+    "model": "main.timesheetrow",
+    "pk": 4,
+    "fields": {
+      "date_worked": "2022-04-11",
+      "worked_seconds": 7200,
+      "payout_seconds": 10800,
+      "timesheet": 4
+    }
+  },
+  {
+    "model": "main.timesheetrow",
+    "pk": 5,
+    "fields": {
+      "date_worked": "2022-04-12",
+      "worked_seconds": 1800,
+      "payout_seconds": 2700,
+      "timesheet": 5
+    }
+  },
+  {
+    "model": "main.timesheetrow",
+    "pk": 6,
+    "fields": {
+      "date_worked": "2022-04-10",
+      "worked_seconds": 7200,
+      "payout_seconds": 14400,
+      "timesheet": 6
+    }
+  },
+  {
+    "model": "main.timesheetrow",
+    "pk": 7,
+    "fields": {
+      "date_worked": "2022-04-11",
+      "worked_seconds": 1500,
+      "payout_seconds": 2250,
+      "timesheet": 7
+    }
+  },
+  {
+    "model": "main.timesheetrow",
+    "pk": 8,
+    "fields": {
+      "date_worked": "2022-04-13",
+      "worked_seconds": 5400,
+      "payout_seconds": 8100,
+      "timesheet": 8
+    }
+  },
+  {
+    "model": "main.timesheetrow",
+    "pk": 9,
+    "fields": {
+      "date_worked": "2022-04-10",
+      "worked_seconds": 5400,
+      "payout_seconds": 10800,
+      "timesheet": 9
+    }
+  },
+  {
+    "model": "main.timesheetrow",
+    "pk": 10,
+    "fields": {
+      "date_worked": "2022-04-11",
+      "worked_seconds": 2100,
+      "payout_seconds": 3150,
+      "timesheet": 10
+    }
+  },
+  {
+    "model": "main.timesheetrow",
+    "pk": 11,
+    "fields": {
+      "date_worked": "2022-04-10",
+      "worked_seconds": 5400,
+      "payout_seconds": 10800,
+      "timesheet": 11
+    }
+  },
+  {
+    "model": "main.timesheetrow",
+    "pk": 12,
+    "fields": {
+      "date_worked": "2022-04-11",
+      "worked_seconds": 7200,
+      "payout_seconds": 10800,
+      "timesheet": 12
+    }
+  },
+  {
+    "model": "main.timesheetrow",
+    "pk": 13,
+    "fields": {
+      "date_worked": "2022-04-11",
+      "worked_seconds": 10800,
+      "payout_seconds": 16200,
+      "timesheet": 13
+    }
+  },
+  {
+    "model": "main.timesheetrow",
+    "pk": 14,
+    "fields": {
+      "date_worked": "2022-04-12",
+      "worked_seconds": 3600,
+      "payout_seconds": 5400,
+      "timesheet": 14
+    }
+  },
+  {
+    "model": "main.timesheetrow",
+    "pk": 15,
+    "fields": {
+      "date_worked": "2022-04-18",
+      "worked_seconds": 3900,
+      "payout_seconds": 5850,
+      "timesheet": 15
+    }
+  },
+  {
+    "model": "main.timesheetrow",
+    "pk": 16,
+    "fields": {
+      "date_worked": "2022-04-12",
+      "worked_seconds": 18000,
+      "payout_seconds": 27000,
+      "timesheet": 16
+    }
+  },
+  {
+    "model": "main.timesheetrow",
+    "pk": 17,
+    "fields": {
+      "date_worked": "2022-04-13",
+      "worked_seconds": 5400,
+      "payout_seconds": 8100,
+      "timesheet": 17
+    }
+  },
+  {
+    "model": "main.timesheetrow",
+    "pk": 18,
+    "fields": {
+      "date_worked": "2022-04-15",
+      "worked_seconds": 7200,
+      "payout_seconds": 10800,
+      "timesheet": 18
+    }
+  },
+  {
+    "model": "main.timesheetrow",
+    "pk": 19,
+    "fields": {
+      "date_worked": "2022-04-13",
+      "worked_seconds": 1500,
+      "payout_seconds": 2250,
+      "timesheet": 19
+    }
+  },
+  {
+    "model": "main.timesheetrow",
+    "pk": 20,
+    "fields": {
+      "date_worked": "2022-04-14",
+      "worked_seconds": 5400,
+      "payout_seconds": 8100,
+      "timesheet": 20
+    }
+  },
+  {
+    "model": "main.timesheetrow",
+    "pk": 21,
+    "fields": {
+      "date_worked": "2022-04-13",
+      "worked_seconds": 7200,
+      "payout_seconds": 10800,
+      "timesheet": 21
+    }
+  },
+  {
+    "model": "main.timesheetrow",
+    "pk": 22,
+    "fields": {
+      "date_worked": "2022-04-10",
+      "worked_seconds": 5400,
+      "payout_seconds": 10800,
+      "timesheet": 22
+    }
+  },
+  {
+    "model": "main.timesheetrow",
+    "pk": 23,
+    "fields": {
+      "date_worked": "2022-04-18",
+      "worked_seconds": 5400,
+      "payout_seconds": 8100,
+      "timesheet": 23
+    }
+  }
+]

@@ -12,7 +12,7 @@ from django.urls import reverse
 from django.views.generic import DetailView, CreateView, ListView, RedirectView, DeleteView, UpdateView
 
 from main.forms import TimeSheetModelForm, PenaltyCreateModelForm, PenaltyTypeCreateModelForm, \
-    EmployeeUpdateModelForm, ClaimForm
+    EmployeeUpdateModelForm, ClaimForm, LogInModelForm, RegisterModelForm, TeamCreateModelForm
 from main.models import Employee, Timesheet, Team, PenaltyType, Settings, Penalty, Claim
 
 
@@ -90,10 +90,6 @@ class ClaimCreateView(LoginRequiredMixin, CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-
-
-
-
 class PenaltyCreateView(LoginRequiredMixin, CreateView):
     model = Penalty
     form_class = PenaltyCreateModelForm
@@ -140,12 +136,13 @@ class LogOffView(LoginRequiredMixin, LogoutView):
 
 class LogInView(LoginView):
     template_name = 'main/login_form.html'
+    authentication_form = LogInModelForm
 
 
 class RegisterEmployeeView(CreateView):
     model = Employee
     template_name = 'main/register_form.html'
-    fields = '__all__'
+    form_class = RegisterModelForm
 
     def get_success_url(self):
         return reverse('home')
@@ -171,7 +168,7 @@ class RegisterEmployeeView(CreateView):
 
 class TeamCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Team
-    fields = ['name']
+    form_class = TeamCreateModelForm
 
     def test_func(self):
         return self.request.user.groups.filter(name='Manager').exists() or self.request.user.is_superuser

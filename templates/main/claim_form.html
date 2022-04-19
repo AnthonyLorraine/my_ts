@@ -18,19 +18,5 @@
             </div>
         {% endfor %}
     </div>
-    <form method="post" class="mt-4" novalidate>{% csrf_token %}
-        {% for field in form %}
-
-            <div class="form-floating mb-3">
-                {{ field }}
-                <label for="id_{{ field.name }}">{{ field.label }}</label>
-                <div id="{{ field.label|cut:" "|lower }}Feedback" class="invalid-feedback fst-italic px-1 m-0">
-                    {{ field.errors.as_text|cut:"*" }}
-                </div>
-            </div>
-        {% endfor %}
-        <div class="d-flex flex-row justify-content-end">
-            <button type="submit" class="btn btn-dark p-3 px-5 mt-3">Claim</button>
-        </div>
-    </form>
+    {% include 'main/floating_validation_form.html' with button_name='Claim' %}
 {% endblock %}

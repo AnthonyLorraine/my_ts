@@ -5,23 +5,6 @@
 {% block content %}
     <main class="container p-3">
         <h1 class="my-4">Create Team</h1>
-        <form method="post">{% csrf_token %}
-
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control {% if form.name.errors %}is-invalid{% endif %}"
-                       id="id_name"
-                       name="name" autocapitalize="none"
-                       placeholder="e123456"
-                       aria-describedby="nameFeedback" required>
-                <label for="id_name">Team Name</label>
-                <div id="nameFeedback" class="invalid-feedback">
-                    {{ form.name.errors }}
-                </div>
-            </div>
-            <div class="d-flex flex-row justify-content-end">
-                <a class="btn p-3 px-3 mt-3 me-3" href="{{ request.META.HTTP_REFERER }}">Back</a>
-                <button type="submit" class="btn btn-dark p-3 px-5 mt-3">Save</button>
-            </div>
-        </form>
+        {% include 'main/floating_validation_form.html' with button_name='Save' back_home='True' %}
     </main>
 {% endblock %}
