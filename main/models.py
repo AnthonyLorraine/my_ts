@@ -6,28 +6,6 @@ from datetime import datetime, timedelta
 import autoslug
 
 
-class Settings(models.Model):
-    name = models.TextField(unique=True)
-    value = models.TextField()
-
-    # Celery/Redis Task?
-    @staticmethod
-    def update_pay_period():
-        today = datetime.today()
-        current_period = Settings.objects.get(name='pay_period')
-        current_pay_period = current_period.value
-        next_pay_period = datetime.strptime(current_pay_period, '%d%m%Y') + timedelta(days=14)
-        if next_pay_period > today:
-            pass
-        else:
-            current_period.value = next_pay_period.strftime('%d%m%Y')
-            current_period.save()
-
-    @staticmethod
-    def get_pay_period():
-        return datetime.strptime(Settings.objects.get(name='pay_period').value, '%d%m%Y')
-
-
 class PenaltyType(models.Model):
     name = models.TextField()
 
@@ -86,16 +64,6 @@ class Employee(AbstractUser):
     @property
     def last_5_claims(self):
         return Claim.objects.filter(employee=self).order_by('claim_date').reverse()[:5]
-
-
-    @property
-    def pay_period_time_sheets(self):
-        pay_period = Settings.get_pay_period()
-        time_sheets = Timesheet.objects.filter(employee=self
-                                               ).filter(start_date_time__gte=pay_period,
-                                                        start_date_time__lte=pay_period + timedelta(days=14)
-                                                        ).order_by('start_date_time').reverse()[:5]
-        return time_sheets
 
     @property
     def total_time_sheets_submitted(self) -> int:

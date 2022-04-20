@@ -1,6 +1,5 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 
-from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.views import LogoutView, LoginView
@@ -8,12 +7,13 @@ from django.core.exceptions import ValidationError
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse
+from main import markdown_messages
 
 from django.views.generic import DetailView, CreateView, ListView, RedirectView, DeleteView, UpdateView
 
 from main.forms import TimeSheetModelForm, PenaltyCreateModelForm, PenaltyTypeCreateModelForm, \
     EmployeeUpdateModelForm, ClaimForm, LogInModelForm, RegisterModelForm, TeamCreateModelForm
-from main.models import Employee, Timesheet, Team, PenaltyType, Settings, Penalty, Claim
+from main.models import Employee, Timesheet, Team, PenaltyType, Penalty, Claim
 
 
 class EmployeeDetailView(LoginRequiredMixin, DetailView):
@@ -25,13 +25,6 @@ class EmployeeDetailView(LoginRequiredMixin, DetailView):
             return user_obj
         except AttributeError:
             return self.request.user
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        messages.info(self.request, 'TEST')
-        context = super().get_context_data()
-        context['pay_period_start'] = Settings.get_pay_period()
-        context['pay_period_end'] = context['pay_period_start'] + timedelta(days=14)
-        return context
 
 
 class EmployeeUpdateView(LoginRequiredMixin, UpdateView):
@@ -205,7 +198,7 @@ class TeamJoinStaffView(LoginRequiredMixin, RedirectView):
         try:
             team.add_employee(self.request.user)
         except ValidationError:
-            messages.error(self.request, f'You\'re already in a team, please leave your team first.')
+            markdown_messages.error(self.request, f'You\'re already in a team, please leave your team first.')
         team.save()
         return redirect('team-list')
 
@@ -258,13 +251,3 @@ class ManagerTeamViewMembersListView(LoginRequiredMixin, ListView):
         context = super().get_context_data()
         context['team'] = self.request.user.team
         return context
-
-
-class SettingsListView(LoginRequiredMixin, ListView):
-    model = Settings
-
-
-class PayPeriodView(LoginRequiredMixin, RedirectView):
-    def get(self, request, *args, **kwargs):
-        Settings.update_pay_period()
-        return redirect('settings-list')

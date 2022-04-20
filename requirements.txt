@@ -2,3 +2,4 @@ Django~=4.0.2
 django-autoslug~=1.9.8
 gunicorn
 django-heroku
+Markdown~=3.3.6

@@ -3,8 +3,8 @@ from django.conf.urls.static import static
 from django.urls import path
 from main.views import EmployeeDetailView, TimesheetCreateView, TimesheetDetailView, LogOffView, LogInView, \
     RegisterEmployeeView, TeamCreateView, TeamListView, TeamJoinStaffView, TeamJoinManagerView, TeamViewMembersListView, \
-    TeamLeaveStaffView, TeamLeaveManagerView, ManagerTeamViewMembersListView, SettingsListView, TeamDeleteView, \
-    PenaltyCreateView, PenaltyTypeCreateView, PenaltyDeleteView, PenaltyTypeDeleteView, PayPeriodView, \
+    TeamLeaveStaffView, TeamLeaveManagerView, ManagerTeamViewMembersListView, TeamDeleteView, \
+    PenaltyCreateView, PenaltyTypeCreateView, PenaltyDeleteView, PenaltyTypeDeleteView, \
     EmployeeUpdateView, ClaimCreateView
 
 urlpatterns = [
@@ -30,8 +30,7 @@ urlpatterns = [
     path('team-leave-manager/<int:team_id>', TeamLeaveManagerView.as_view(), name='team-leave-manager'),
     path('team-detail/<int:team_id>', TeamViewMembersListView.as_view(), name='team-view-members-list'),
     path('manager-team-member-list', ManagerTeamViewMembersListView.as_view(), name='manager-team-member-list'),
-    path('settings-list', SettingsListView.as_view(), name='settings-list'),
-    path('update-pay-period', PayPeriodView.as_view(), name='update-pay-period'),
+
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
