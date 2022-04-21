@@ -5,10 +5,10 @@ from main.views import EmployeeDetailView, TimesheetCreateView, TimesheetDetailV
     RegisterEmployeeView, TeamCreateView, TeamListView, TeamJoinStaffView, TeamJoinManagerView, TeamViewMembersListView, \
     TeamLeaveStaffView, TeamLeaveManagerView, ManagerTeamViewMembersListView, TeamDeleteView, \
     PenaltyCreateView, PenaltyTypeCreateView, PenaltyDeleteView, PenaltyTypeDeleteView, \
-    EmployeeUpdateView, ClaimCreateView
+    EmployeeUpdateView, ClaimCreateView, HomeView
 
 urlpatterns = [
-    path('', EmployeeDetailView.as_view(), name='home'),
+    path('', HomeView.as_view(), name='home'),
     path('employee/<slug:slug>', EmployeeDetailView.as_view(), name='employee-detail'),
     path('employee-update/<slug:slug>', EmployeeUpdateView.as_view(), name='employee-update'),
     path('logout', LogOffView.as_view(), name='logout'),

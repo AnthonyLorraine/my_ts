@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from datetime import datetime, timedelta
 import autoslug
+from django.urls import reverse
 
 
 class PenaltyType(models.Model):

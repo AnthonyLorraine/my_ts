@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.contrib.auth import login
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin
 from django.contrib.auth.views import LogoutView, LoginView
 from django.core.exceptions import ValidationError
 from django.http import Http404, HttpResponseRedirect
@@ -19,21 +19,25 @@ from main.models import Employee, Timesheet, Team, PenaltyType, Penalty, Claim
 class EmployeeDetailView(LoginRequiredMixin, DetailView):
     model = Employee
 
+
+class HomeView(LoginRequiredMixin, DetailView):
+    model = Employee
+
     def get_object(self, *args, **kwargs):
-        try:
-            user_obj = super().get_object()
-            return user_obj
-        except AttributeError:
-            return self.request.user
+        return self.request.user
 
 
-class EmployeeUpdateView(LoginRequiredMixin, UpdateView):
+class EmployeeUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     model = Employee
     form_class = EmployeeUpdateModelForm
     template_name = 'main/employee_form.html'
 
     def get_success_url(self):
         return reverse('employee-detail', kwargs={'slug': self.object.slug})
+
+    def has_permission(self):
+        employee = self.get_object()
+        return self.request.user == employee or self.request.user == employee.team.manager
 
 
 class TimesheetCreateView(LoginRequiredMixin, CreateView):
@@ -136,6 +140,12 @@ class RegisterEmployeeView(CreateView):
     model = Employee
     template_name = 'main/register_form.html'
     form_class = RegisterModelForm
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('home')
+        else:
+            return super().get(request, *args, **kwargs)
 
     def get_success_url(self):
         return reverse('home')
