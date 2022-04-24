@@ -60,8 +60,13 @@ class TimesheetCreateView(LoginRequiredMixin, CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class TimesheetDetailView(LoginRequiredMixin, DetailView):
+class TimesheetDetailView(PermissionRequiredMixin, LoginRequiredMixin, DetailView):
     model = Timesheet
+
+    def has_permission(self):
+        timesheet = self.get_object()
+
+        return self.request.user == timesheet.employee or self.request.user == timesheet.employee.team.manager
 
 
 class ClaimCreateView(LoginRequiredMixin, CreateView):

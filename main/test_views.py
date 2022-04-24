@@ -1,7 +1,9 @@
+from datetime import datetime
+
 from django.test import TestCase
 from django.urls import reverse
 
-from main.models import PenaltyType, Employee, Penalty, Team
+from main.models import PenaltyType, Employee, Penalty, Team, Timesheet
 
 
 class PenaltyTypeCreateViewTestCase(TestCase):
@@ -305,93 +307,106 @@ class TestEmployeeUpdateView(TestCase):
 
 
 class TestTimesheetCreateView(TestCase):
-    def test_get_initial(self):
-        self.fail()
+    fixtures = ['auth_group.json']
+
+    def setUp(self) -> None:
+        self.new_penalty_type = PenaltyType.objects.create(name='Test Penalty Type')
+        self.new_penalty = Penalty.objects.create(name='Test Penalty', penalty_type=self.new_penalty_type)
+        self.test_employee: Employee = Employee.objects.create_user(username='ant',
+                                                                    first_name='Anthony',
+                                                                    last_name='Lorraine')
+        start_date_time = datetime.today()
+        self.test_manager = Employee.objects.create_user(username='manager',
+                                                         first_name='manager',
+                                                         last_name='user')
+        self.test_employee.add_timesheet(start_date_time=start_date_time,
+                                         duration=60,
+                                         penalty=self.new_penalty)
+        self.test_not_manager = Employee.objects.create_user(username='not_a_manager',
+                                                             first_name='not manager',
+                                                             last_name='user')
+        self.client.force_login(user=self.test_employee)
+
+        self.test_team = Team.objects.create(name='test team')
+        self.test_team.add_employee(self.test_employee)
+        self.test_team.add_manager(self.test_manager)
 
     def test_get_success_url(self):
-        self.fail()
+        start_date_time = datetime.today()
+        response = self.client.post(reverse('timesheet-create'),
+                                    data={
+                                        'start_date_time': start_date_time,
+                                        '_duration': 60,
+                                        'penalty': self.new_penalty.pk
 
-    def test_form_valid(self):
-        self.fail()
+                                    })
+        self.assertRedirects(response, reverse('home'))
+
+    def test_get_require_authentication(self):
+        self.client.logout()
+        response = self.client.get(reverse('timesheet-create'))
+        self.assertRedirects(response, reverse('login') + '?next=' + reverse('timesheet-create'))
+
+    def test_get_user_authenticated(self):
+        response = self.client.get(reverse('timesheet-create'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_template_used(self):
+        response = self.client.get(reverse('timesheet-create'))
+        self.assertTemplateUsed(response, 'main/timesheet_form.html')
 
 
 class TestTimesheetDetailView(TestCase):
-    pass
+    fixtures = ['auth_group.json']
 
+    def setUp(self) -> None:
+        self.new_penalty_type = PenaltyType.objects.create(name='Test Penalty Type')
+        self.new_penalty = Penalty.objects.create(name='Test Penalty', penalty_type=self.new_penalty_type)
+        self.test_employee: Employee = Employee.objects.create_user(username='ant',
+                                                                    first_name='Anthony',
+                                                                    last_name='Lorraine')
+        start_date_time = datetime.today()
+        self.test_manager = Employee.objects.create_user(username='manager',
+                                                         first_name='manager',
+                                                         last_name='user')
+        self.test_employee.add_timesheet(start_date_time=start_date_time,
+                                         duration=60,
+                                         penalty=self.new_penalty)
+        self.test_not_manager = Employee.objects.create_user(username='not_a_manager',
+                                                             first_name='not manager',
+                                                             last_name='user')
+        self.client.force_login(user=self.test_employee)
 
-class TestClaimCreateView(TestCase):
-    def test_get_initial(self):
-        self.fail()
+        self.test_team = Team.objects.create(name='test team')
+        self.test_team.add_employee(self.test_employee)
+        self.test_team.add_manager(self.test_manager)
 
-    def test_get_success_url(self):
-        self.fail()
+    def test_get_require_authentication(self):
+        self.client.logout()
+        response = self.client.get(reverse('timesheet-detail', kwargs={'pk': 1}))
+        self.assertRedirects(response, reverse('login') + '?next=/timesheet-detail/1')
 
-    def test_form_valid(self):
-        self.fail()
+    def test_get_user_authenticated(self):
+        response = self.client.get(reverse('timesheet-detail', kwargs={'pk': 1}))
+        self.assertEqual(response.status_code, 200)
 
-
-class TestLogOffView(TestCase):
-    pass
-
-
-class TestLogInView(TestCase):
-    pass
-
-
-class TestTeamCreateView(TestCase):
-    def test_test_func(self):
-        self.fail()
-
-    def test_get_success_url(self):
-        self.fail()
-
-
-class TestTeamDeleteView(TestCase):
-    def test_test_func(self):
-        self.fail()
-
-    def test_get_success_url(self):
-        self.fail()
+    def test_template_used(self):
+        response = self.client.get(reverse('timesheet-detail', kwargs={'pk': 1}))
+        self.assertTemplateUsed(response, 'main/timesheet_detail.html')
 
     def test_get_object(self):
-        self.fail()
+        response = self.client.get(reverse('timesheet-detail', kwargs={'pk': 1}))
+        timesheet = Timesheet.objects.get(pk=1)
+        self.assertEqual(response.context['object'], timesheet)
 
+    def test_get_user_is_manager(self):
+        self.client.logout()
+        self.client.force_login(user=self.test_manager)
+        response = self.client.get(reverse('timesheet-detail', kwargs={'pk': 1}))
+        self.assertEqual(response.status_code, 200)
 
-class TestTeamListView(TestCase):
-    pass
-
-
-class TestTeamJoinStaffView(TestCase):
-    def test_get(self):
-        self.fail()
-
-
-class TestTeamLeaveStaffView(TestCase):
-    def test_get(self):
-        self.fail()
-
-
-class TestTeamJoinManagerView(TestCase):
-    def test_get(self):
-        self.fail()
-
-
-class TestTeamLeaveManagerView(TestCase):
-    def test_get(self):
-        self.fail()
-
-
-class TestTeamViewMembersListView(TestCase):
-    def test_get_queryset(self):
-        self.fail()
-
-    def test_get_context_data(self):
-        self.fail()
-
-
-class TestManagerTeamViewMembersListView(TestCase):
-    def test_get_queryset(self):
-        self.fail()
-
-    def test_get_context_data(self):
-        self.fail()
+    def test_get_user_is_not_manager(self):
+        self.client.logout()
+        self.client.force_login(user=self.test_not_manager)
+        response = self.client.get(reverse('timesheet-detail', kwargs={'pk': 1}))
+        self.assertEqual(response.status_code, 403)
