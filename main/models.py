@@ -26,9 +26,15 @@ class PenaltyType(models.Model):
 
 
 class Penalty(models.Model):
+    penalty_types = [
+        ('PD', 'Paid'),
+        ('TL', 'Toil')
+    ]
     name = models.TextField()
-    penalty_type = models.ForeignKey(PenaltyType, on_delete=models.RESTRICT)
+    penalty_type = models.CharField(max_length=2, choices=penalty_types, default='PD')
+    # penalty_type = models.ForeignKey(PenaltyType, on_delete=models.RESTRICT)
     valid_for_day_count = models.IntegerField(default=14)
+    base_threshold = models.IntegerField(default=7200)
 
     def __str__(self):
         return self.name
@@ -45,7 +51,7 @@ class Employee(AbstractUser):
     def add_timesheet(self, start_date_time: datetime, duration: int, penalty: Penalty):
         ts = Timesheet.objects.create(employee=self,
                                       start_date_time=start_date_time,
-                                      duration=duration,
+                                      _duration=duration,
                                       penalty=penalty)
         ts.save()
 
@@ -57,7 +63,6 @@ class Employee(AbstractUser):
 
     @property
     def last_5_time_sheets(self):
-        # pay_period = Settings.get_pay_period()
         time_sheets = Timesheet.objects.filter(employee=self).order_by(
             'start_date_time').reverse()[:5]
         return time_sheets
@@ -192,32 +197,33 @@ class Team(models.Model):
         return list(zip(list(durations), list(durations.values())))
 
 
+def get_hours_left(ts):
+    return 24 - (ts.hour + ts.minute / 60)
+
+
 class Timesheet(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.RESTRICT)
     start_date_time = models.DateTimeField()
     _duration = models.IntegerField()
     penalty = models.ForeignKey(Penalty, on_delete=models.RESTRICT)
+    claim = models.ForeignKey('TimesheetClaim', blank=True, null=True, on_delete=models.RESTRICT)
 
     def save(self, *args, **kwargs):
         super(Timesheet, self).save(*args, **kwargs)
         self.create_time_sheet_row()
+        self.create_time_sheet_cost_row()
 
     def create_time_sheet_row(self):
-
         diff = self.end_date_time - self.start_date_time
-
-        def get_hours_left(ts):
-            return 24 - (ts.hour + ts.minute / 60)
 
         # Worked Time is all within one day.
         if self.start_date_time.date() == self.end_date_time.date():
-            tsr = TimesheetRow.objects.create(date_worked=self.start_date_time.date(),
-                                              worked_seconds=self.duration.total_seconds(),
-                                              payout_seconds=self._calculate_payout_amount_in_seconds(
-                                                  day=self.start_date_time.date(),
-                                                  seconds=self.duration.total_seconds()),
-                                              timesheet_id=self.pk)
-            tsr.save()
+            TimesheetRow.objects.create(date_worked=self.start_date_time.date(),
+                                        worked_seconds=self.duration.total_seconds(),
+                                        payout_seconds=self._calculate_payout_amount_in_seconds(
+                                            day=self.start_date_time.date(),
+                                            seconds=self.duration.total_seconds()),
+                                        timesheet_id=self.pk)
         else:
             # Worked Time is on multiple days.
             start = self.start_date_time
@@ -226,13 +232,35 @@ class Timesheet(models.Model):
                     hours_remaining = get_hours_left(start)
                 else:
                     hours_remaining = self.end_date_time.hour + self.end_date_time.minute / 60
-                tsr = TimesheetRow.objects.create(date_worked=start.date(),
-                                                  worked_seconds=round(hours_remaining * 3600),
-                                                  payout_seconds=self._calculate_payout_amount_in_seconds(
-                                                      day=start.date(),
-                                                      seconds=round(hours_remaining * 3600)),
-                                                  timesheet=self)
-                tsr.save()
+                TimesheetRow.objects.create(date_worked=start.date(),
+                                            worked_seconds=round(hours_remaining * 3600),
+                                            payout_seconds=self._calculate_payout_amount_in_seconds(
+                                                day=start.date(),
+                                                seconds=round(hours_remaining * 3600)),
+                                            timesheet=self)
+
+                start = start + timedelta(hours=hours_remaining)
+
+    def create_time_sheet_cost_row(self):
+        if self.start_date_time.date() == self.end_date_time.date():
+            # Worked Time is all within one day.
+            self._calculate_and_create_cost_codes(self.start_date_time.date(), self._duration, 0)
+        else:
+            # Worked Time is on multiple days.
+            start = self.start_date_time
+            diff = self.end_date_time - self.start_date_time
+            prior_day_time = 0
+            for day in range(diff.days + bool(diff.seconds) + 1):
+                if start.date() != self.end_date_time.date():
+                    hours_remaining = get_hours_left(start)
+                else:
+                    hours_remaining = self.end_date_time.hour + self.end_date_time.minute / 60
+
+                self._calculate_and_create_cost_codes(start.date(),
+                                                      round(hours_remaining * 3600),
+                                                      prior_day_time)
+                prior_day_time = round(hours_remaining * 3600)
+
                 start = start + timedelta(hours=hours_remaining)
 
     def public_holiday(self, day):
@@ -248,6 +276,96 @@ class Timesheet(models.Model):
         elif not is_public_holiday and not day.weekday() == 6:  # Base 1.5x Multiplier
             duration += seconds * 1.5
         return round(duration)
+
+    def _calculate_and_create_cost_codes(self, day, seconds, prior) -> None:
+        is_public_holiday = self.public_holiday(day)
+        over_base_threshold = prior >= self.penalty.base_threshold
+        seconds_below_threshold = seconds < self.penalty.base_threshold
+        first_record = prior == 0
+        if is_public_holiday:  # Always public holiday 2.5x Multiplier
+            cost_code = CostCode.objects.get(pk=3)  # Not ideal
+            TimesheetClaimRow.objects.create(time_sheet=self,
+                                             cost_code=cost_code,
+                                             seconds=seconds)
+            return
+        elif day.weekday() == 6 and not is_public_holiday:  # Always Sunday 2x Multiplier
+            cost_code = CostCode.objects.get(pk=2)  # Not ideal
+            TimesheetClaimRow.objects.create(time_sheet=self,
+                                             cost_code=cost_code,
+                                             seconds=seconds)
+            return
+        elif not is_public_holiday and not day.weekday() == 6:  # Weekday, no modifiers, can have carry over
+
+            if first_record and seconds_below_threshold:  # First cost code entered, not over threshold
+                cost_code = CostCode.objects.get(pk=1)  # Not ideal
+                # All seconds are added to base code, no further actions
+                TimesheetClaimRow.objects.create(
+                    time_sheet=self,
+                    cost_code=cost_code,
+                    seconds=seconds
+                )
+                return
+
+            if first_record and not seconds_below_threshold:  # First cost code entered, over threshold
+                cost_code = CostCode.objects.get(pk=1)  # Not ideal
+                # Assign the base threshold seconds to the base code
+                TimesheetClaimRow.objects.create(
+                    time_sheet=self,
+                    cost_code=cost_code,
+                    seconds=self.penalty.base_threshold
+                )
+                cost_code = CostCode.objects.get(pk=2)  # Not ideal
+                # Assign remaining seconds to the overtime code
+                TimesheetClaimRow.objects.create(
+                    time_sheet=self,
+                    cost_code=cost_code,
+                    seconds=abs(self.penalty.base_threshold - seconds)
+                )
+                return
+
+            if not first_record and over_base_threshold:
+                # previous record already over threshold, apply next modifier to remaining time.
+                # check if there is a previous record with the same code
+                cost_code = CostCode.objects.get(pk=2)
+                tcr = TimesheetClaimRow.objects.filter(time_sheet=self, cost_code=cost_code).first()
+                if tcr:
+                    # add seconds to existing claim
+                    tcr.seconds += seconds
+                    tcr.save()
+                    return
+                else:
+                    # create new claim with over time code
+                    TimesheetClaimRow.objects.create(
+                        time_sheet=self,
+                        cost_code=cost_code,
+                        seconds=seconds
+                    )
+                    return
+
+            if not first_record and not over_base_threshold:
+                # previous record wasn't over the threshold
+                cost_code = CostCode.objects.get(pk=1)
+                # take the prior amount and subtract it from the base threshold
+                # then use that value to create a claim with the base code
+                tcr = TimesheetClaimRow.objects.filter(time_sheet=self, cost_code=cost_code).first()
+                if tcr:
+                    tcr.seconds += abs(prior - self.penalty.base_threshold)
+                    tcr.save()
+                else:
+                    TimesheetClaimRow.objects.create(
+                        time_sheet=self,
+                        cost_code=cost_code,
+                        seconds=abs(prior - self.penalty.base_threshold)
+                    )
+
+                cost_code = CostCode.objects.get(pk=2)
+                # remaining seconds are to be used on the over time code
+                TimesheetClaimRow.objects.create(
+                    time_sheet=self,
+                    cost_code=cost_code,
+                    seconds=abs(seconds - abs(prior - self.penalty.base_threshold))
+                )
+                return
 
     @property
     def expired(self):
@@ -267,6 +385,10 @@ class Timesheet(models.Model):
         """
         rows = TimesheetRow.objects.filter(timesheet=self)
         return rows
+
+    @property
+    def costs(self):
+        return TimesheetClaimRow.objects.filter(time_sheet=self)
 
     @property
     def duration(self):
@@ -299,6 +421,10 @@ class TimesheetRow(models.Model):
     def accrued_duration(self):
         return timedelta(seconds=self.payout_seconds)
 
+    @property
+    def day_name(self):
+        return self.date_worked.strftime("%A")
+
 
 class Claim(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.RESTRICT)
@@ -314,7 +440,7 @@ class Claim(models.Model):
 
     def employee_can_claim_penalty_type(self) -> bool:
         employee_time_sheets = Timesheet.objects.filter(employee=self.employee, penalty__penalty_type=self.penalty_type)
-        available_time = sum([ts.penalty.penalty_type.calculate_available_employee_time(self.employee)*3600
+        available_time = sum([ts.penalty.penalty_type.calculate_available_employee_time(self.employee) * 3600
                               for ts in employee_time_sheets])
         if available_time >= self.claimed_seconds:
             return True
@@ -324,3 +450,61 @@ class Claim(models.Model):
     @property
     def duration(self):
         return timedelta(seconds=self.claimed_seconds)
+
+
+class CostCode(models.Model):
+    name = models.CharField(max_length=50)
+    code = models.CharField(max_length=50)
+
+
+class TimesheetClaimRow(models.Model):
+    time_sheet = models.ForeignKey(Timesheet, on_delete=models.RESTRICT)
+    cost_code = models.ForeignKey(CostCode, on_delete=models.RESTRICT)
+    seconds = models.IntegerField(default=0)
+
+    @property
+    def units(self):
+        return self.seconds / 3600
+
+
+class TimesheetClaim(models.Model):
+    pay_date = models.DateField(blank=True, null=True)
+
+    @property
+    def period_end(self):
+        return self.pay_date - timedelta(days=self.pay_date.weekday() + 1)
+
+    @property
+    def period_start(self):
+        return self.period_end - timedelta(days=14)
+
+    def add_time_sheets(self):
+        time_sheets = Timesheet.objects.filter(start_date_time__gte=self.period_start,
+                                               start_date_time__lte=self.period_end)
+        for time_sheet in time_sheets:
+            if time_sheet.end_date_time.date() > self.period_end:
+                pass
+            else:
+                self.timesheet_set.add(time_sheet)
+                # todo will currently override existing time sheets with newest claim #
+                # todo allow for checking existing records
+
+# output duration per cost code (multiplier)
+# 1.5 is drawn from cost code A
+# 2 is drawn from cost code B
+# setting public holidays out of scope
+# focus is to accurately record duration spent on a task and in the accrued duration,
+# calculate timesheet rows accordingly
+#
+# 3 hr timesheet will have, timesheet rows:
+# 2 hours @ code A
+#       11pm - 12am 1 hr x 1.5
+#       12am - 1am 1 hr x 1.5
+# 1 hour @ code B
+#       1am - 2am 1 hr x 2.0
+
+# proposal
+# hard code Penalty Types so only PAID and TOIL are supported
+# Add cost code table with Code, Name
+# A claim will take everything within a pay period and group by date for the time sheet submission
+# There will be a breakdown of duration by cost codes, this will be a base duration worked

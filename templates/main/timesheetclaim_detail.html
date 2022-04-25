@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% for timesheet in timesheetclaim.timesheet_set.all %}
+        <section class="container">
+            <div class="d-flex flex-column py-5 my-5">
+                <header class="d-flex flex-row justify-content-around">
+                    <div>
+                        Time Sheet {{ timesheetclaim.pk }}<br/>
+                        Pay Period {{ timesheetclaim.period_start|date:'d/m' }}
+                        to {{ timesheetclaim.period_end|date:'d/m' }}
+                    </div>
+                    <div class="d-flex flex-column">
+                        <div>
+                            Employee Name: {{ timesheet.employee.get_full_name }}
+                        </div>
+                        <div>
+                            Username: {{ timesheet.employee.username }}
+                        </div>
+                        <div>
+                            Cost Centre TBC
+                        </div>
+                    </div>
+                </header>
+                <main class="d-flex flex-row justify-content-between">
+                    <div class="flex-fill pe-5">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th colspan="2">Date Worked</th>
+                                <th>Duration</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for row in timesheet.rows %}
+                                <tr>
+                                    <td>{{ row.date_worked }}</td>
+                                    <td>{{ row.day_name }}</td>
+                                    <td>{{ row.duration }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="flex-fill">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Code</th>
+                                <th>Units</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for cost in timesheet.costs %}
+                                <tr>
+                                    <td>
+                                        {{ cost.cost_code.name }}
+                                    </td>
+                                    <td>
+                                        {{ cost.cost_code.code }}
+                                    </td>
+                                    <td>
+                                        {{ cost.units }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </main>
+                <footer class="d-flex flex-row justify-content-between">
+                    <div class="d-flex flex-row align-items-center">
+                        <div class="d-flex flex-column">
+                            <div>
+                                Employee Signature: __________________________
+                            </div>
+                            <div>
+                                Manager: {{ timesheet.employee.team.manager.get_full_name }}
+                            </div>
+                            <div>
+                                Signature: __________________________
+                            </div>
+                        </div>
+                        <div>
+
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </section>
+    {% endfor %}
+{% endblock %}

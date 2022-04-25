@@ -13,7 +13,7 @@ from django.views.generic import DetailView, CreateView, ListView, RedirectView,
 
 from main.forms import TimeSheetModelForm, PenaltyCreateModelForm, PenaltyTypeCreateModelForm, \
     EmployeeUpdateModelForm, ClaimForm, LogInModelForm, RegisterModelForm, TeamCreateModelForm
-from main.models import Employee, Timesheet, Team, PenaltyType, Penalty, Claim
+from main.models import Employee, Timesheet, Team, PenaltyType, Penalty, Claim, TimesheetClaim
 
 
 class EmployeeDetailView(LoginRequiredMixin, DetailView):
@@ -266,3 +266,10 @@ class ManagerTeamViewMembersListView(LoginRequiredMixin, ListView):
         context = super().get_context_data()
         context['team'] = self.request.user.team
         return context
+
+
+class TimesheetClaimListView(DetailView):
+    model = TimesheetClaim
+
+    def get_object(self, *args, **kwargs):
+        return self.model.objects.last()

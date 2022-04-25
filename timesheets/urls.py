@@ -5,7 +5,7 @@ from main.views import EmployeeDetailView, TimesheetCreateView, TimesheetDetailV
     RegisterEmployeeView, TeamCreateView, TeamListView, TeamJoinStaffView, TeamJoinManagerView, TeamViewMembersListView, \
     TeamLeaveStaffView, TeamLeaveManagerView, ManagerTeamViewMembersListView, TeamDeleteView, \
     PenaltyCreateView, PenaltyTypeCreateView, PenaltyDeleteView, PenaltyTypeDeleteView, \
-    EmployeeUpdateView, ClaimCreateView, HomeView
+    EmployeeUpdateView, ClaimCreateView, HomeView, TimesheetClaimListView
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
@@ -30,7 +30,7 @@ urlpatterns = [
     path('team-leave-manager/<int:team_id>', TeamLeaveManagerView.as_view(), name='team-leave-manager'),
     path('team-detail/<int:team_id>', TeamViewMembersListView.as_view(), name='team-view-members-list'),
     path('manager-team-member-list', ManagerTeamViewMembersListView.as_view(), name='manager-team-member-list'),
-
+    path('claim', TimesheetClaimListView.as_view(), name='timesheet-claim')
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
